@@ -1,0 +1,28 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=95
+
+protect_key_service() {
+    pid=$(cat $1)
+    realtime=$2
+    chrt -r -p ${realtime} ${pid}
+    # prevent from OOM killer
+    echo -1000 > /proc/${pid}/oom_score_adj
+}
+
+boot() {
+	[ -d /tmp/root ] && {
+		lock /tmp/.switch2jffs
+		firstboot switch2jffs
+		lock -u /tmp/.switch2jffs
+	}
+
+	# adjust key server nice value and OOM score
+	protect_key_service /var/run/ubusd.pid 80
+
+	# process user commands
+	[ -f /etc/rc.local ] && {
+		sh /etc/rc.local
+	}
+}

@@ -1,0 +1,58 @@
+#!/bin/sh /etc/rc.common
+
+START=80
+STOP=20
+
+#export command line for /usr/sbin/supervisord
+export PROCLINE="/usr/sbin/datacenter"
+export PROC_USE_CGROUP_PATH="/dev/cgroup/mem/group1/tasks"
+
+change_finishapp_status() {
+	dir=/userdisk/appdata/app_infos/
+	for filename in `ls $dir`
+	do
+	    files=$dir$filename
+	    if [ -f "$files" ]
+	    then
+	        sed -i '/^status/s/\(.*\"\)\(7\)\(\".*\)/\1'5'\3/g' $files
+	    fi
+	done
+}
+
+
+start() {
+
+	#删除记录插件pid的文件
+	rm -f /userdisk/appdata/plugin_id_info.cfg
+	
+	#处理一部分data文件夹没有写权限的问题
+	chmod 777 /userdisk/data
+        
+	#更改部分由任务管理器关闭的插件状态
+	change_finishapp_status
+	
+	/usr/sbin/supervisord start
+	return $?
+}
+
+restart() {
+	stop
+	sleep 1
+	start
+	return $?
+}
+
+shutdown() {
+	stop
+	return $?
+}
+
+stop() {
+	/usr/sbin/supervisord stop
+	return $?
+}
+status() {
+	/usr/sbin/supervisord status
+	return $?
+}
+#

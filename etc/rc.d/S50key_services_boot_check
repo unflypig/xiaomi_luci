@@ -1,0 +1,263 @@
+#!/bin/sh /etc/rc.common
+
+#this script will run by /etc/init.d/rcS after all rc script.
+START=50
+#STOP=99
+
+#
+#reboot if REBOOTFLAGFILE set to REBOOT=1, by another script
+REBOOTFLAGFILE='/tmp/needreboot.stat'
+
+#/etc/init.d/rcS will save all /etc/rc.d/S* exitcode into this file
+RCSTATFILE='/tmp/rc.timing'
+
+SKIPLIST='boot_check'
+
+KEYSRVLIST='boot messagingagent.sh dnsmasq network sysapihttpd'
+
+elog(){
+	tmsg="$@"
+	logger -p local0.warning -t boot_check "boot_check[${$}]: $tmsg"
+	echo "`date` boot_check[${$}]: $tmsg" >> /dev/console
+}
+pipelog(){
+	local oneline
+	while read oneline
+	do
+		elog "$oneline"
+	done
+}
+
+find_mtd_part() {
+	local PART="$(grep "\"$1\"" /proc/mtd | awk -F: '{print $1}')"
+	local PREFIX=/dev/mtdblock
+	PART="${PART##mtd}"
+	[ -d /dev/mtdblock ] && PREFIX=/dev/mtdblock/
+	echo "${PART:+$PREFIX$PART}"
+}
+
+start() {
+	#
+	#check /etc/rc.d/S* exitcode
+	#
+	errcnt=0
+	touch /tmp/$$.bootcheck.log
+	cat $RCSTATFILE 2>/dev/null | grep 'EXITCODE=' | grep -v 'EXITCODE=0;' > /tmp/$$.bootcheck.log
+	while read oneline
+	do
+		#EXITCODE=0;ESP=0;LIMIT=10;CMD=/etc/rc.d/S99datacenter;ARG=boot;
+		match=0
+		for onesrv in $SKIPLIST
+		do
+			echo "$oneline" | grep -q "[0-9]\{1,100\}$onesrv;" && match=1&&break
+		done
+		test $match -ne 0 && continue
+
+		match=0
+		for onesrv in $KEYSRVLIST
+		do
+			echo "$oneline" | grep -q "[0-9]\{1,100\}$onesrv;" && match=1&&break
+		done
+		if [ $match -ne 0 ]
+			then
+			let errcnt=$errcnt+1
+			elog "ERROR: KEY SERVICE FAILED: $oneline"
+		else
+			logger -p local0.warning -t boot_check "WARNING: SERVICE FAILED: $oneline"
+		fi
+	done </tmp/$$.bootcheck.log
+
+	bootcheck_fails=`nvram get bootcheck_fails`
+	if [ -z "$bootcheck_fails" ]
+	then
+		bootcheck_fails=0
+	fi
+
+	ft_mode=`cat /proc/xiaoqiang/ft_mode`
+	ft_ret=0
+	if [ $errcnt -ne 0 ]
+		then
+		#
+		elog "ERROR: $errcnt KEY SERVICE FAILED."
+		elog "Try rebooting system to recover."
+		#
+
+                # save log to crash partition
+		cd /tmp
+		gzip messages
+		mtd_crash_log -f messages.gz
+
+		ft_ret=1
+
+		let bootcheck_fails=$bootcheck_fails+1
+		if [ $ft_mode -ne 1 ]
+		then
+			nvram set bootcheck_keysrv=$errcnt
+			nvram set bootcheck_fails=$bootcheck_fails
+			if [ $bootcheck_fails -ge 3 ]
+			then
+				nvram set flag_boot_recovery=1
+			fi
+			nvram commit
+			reboot
+			exit -1
+		fi
+	fi
+
+	# 检查 wifi是否正常
+	wl0_count=`cat /proc/net/dev | grep wl0 | wc -l`
+	wl1_count=`cat /proc/net/dev | grep wl1 | wc -l`
+        wl0_error=`dmesg | grep "PCIE0 no card, disable it(RST&CLK)"|wc -l`
+	try_time=`nvram get no_wifi_dev_times`
+	if [ $wl0_count -eq 1 ] && [ $wl1_count -eq 1 ]; then
+		elog "INFO: Wireless OK"
+                nvram set no_wifi_dev_times=0
+                nvram set no_wifi_reboot_times=0
+                nvram commit
+        elif [ $wl0_count -eq 0 ] && [ $wl1_count -eq 0 ]; then
+		interface_info=`cat /proc/net/dev | awk '{print $1}'`
+		wl0_info=`iwpriv wl0 e2p 0`
+		wl1_info=`iwpriv wl1 e2p 0`
+		pci_info=`cat /proc/bus/pci/devices`
+		mod_info=`lsmod`
+		elog "INFO: no wireless available wl_count: $wl_count"
+		elog "interface_info: $interface_info"
+		elog "wl0_info: $wl0_info"
+		elog "wl1_info: $wl1_info"
+		elog "pci_info: $pci_info"
+		elog "mod_info: $mod_info"
+                # save log to crash partition
+		cd /tmp
+		gzip messages
+		mtd_crash_log -f messages.gz
+
+		try=`nvram get no_wifi_reboot_times`
+		if [ "$try" = "" ]; then
+			try=1
+			nvram set no_wifi_reboot_times=$try
+		else
+			try=`expr $try + 1`
+			nvram set no_wifi_reboot_times=$try
+		fi
+		nvram commit
+
+		ft_ret=2
+
+		let bootcheck_fails=$bootcheck_fails+1
+		if [ $ft_mode -ne 1 ]
+		then
+			if [ $try -ge 2 ]; then
+				nvram set bootcheck_nowifi=1
+				nvram set bootcheck_fails=$bootcheck_fails
+				if [ $bootcheck_fails -ge 3 ]
+				then
+					nvram set flag_boot_recovery=1
+				fi
+				nvram commit
+			fi
+			elog "INFO: reboot times $try because of no wireless available."
+			reboot
+			exit -1
+                fi
+        elif [ $wl0_error -eq 1 ] && [ $wl1_count -eq 1 ]; then
+                elog "========== mt7612en chip error."
+                try_time=`expr $try_time + 1`
+                nvram set no_wifi_dev_times=$try_time
+                nvram commit
+        elif [ $wl1_count -eq 0 ] && [ $wl0_count -eq 1 ]; then
+                elog "========== r1cm 2.4G not found ."
+                try_time=`expr $try_time + 1`
+                nvram set no_wifi_dev_times=$try_time
+                nvram commit
+        elif [ $wl0_count -eq 0 ] && [ wl1_count -eq 1 ] && [ wl0_error -eq 0 ]; then
+                echo "========== r1cm 5G not found"
+                interface_info=`cat /proc/net/dev | awk '{print $1}'`
+		wl0_info=`iwpriv wl0 e2p 0`
+		wl1_info=`iwpriv wl1 e2p 0`
+		pci_info=`cat /proc/bus/pci/devices`
+		mod_info=`lsmod`
+		elog "INFO:  wireless available wl_count: $wl_count"
+		elog "interface_info: $interface_info"
+		elog "wl0_info: $wl0_info"
+		elog "wl1_info: $wl1_info"
+		elog "pci_info: $pci_info"
+		elog "mod_info: $mod_info"
+                # save log to crash partition
+		cd /tmp
+		gzip messages
+		mtd_crash_log -f messages.gz
+
+		try=`nvram get no_wifi_reboot_times`
+		if [ "$try" = "" ]; then
+			try=1
+			nvram set no_wifi_reboot_times=$try
+		else
+			try=`expr $try + 1`
+			nvram set no_wifi_reboot_times=$try
+		fi
+		nvram commit
+
+		ft_ret=2
+		if [ $ft_mode -ne 1 ]
+		then
+			if [ $try -ge 3 ]; then
+			        nvram set no_wifi_reboot_times=0
+				nvram commit
+                        else
+                                elog "INFO: reboot times $try because of no 5G not found available."
+			        reboot
+			        exit -1
+                        fi
+                fi
+
+        else
+                elog " Maybe never here."
+	fi
+
+	# 检查eth0 是否存在
+	cat /proc/net/dev | grep -q "eth0" > /dev/null
+	[ $? -ne 0 ] && {
+		elog "INFO: no network available /dev/$hdd"
+                # save log to crash partition
+		cd /tmp
+		gzip messages
+		mtd_crash_log -f messages.gz
+
+		ft_ret=3
+
+		let bootcheck_fails=$bootcheck_fails+1
+		if [ $ft_mode -ne 1 ]
+		then
+			nvram set bootcheck_eth0=1
+			nvram set bootcheck_fails=$bootcheck_fails
+			if [ $bootcheck_fails -ge 3 ]
+			then
+				nvram set flag_boot_recovery=1
+			fi
+			nvram commit
+			reboot
+			exit -1
+		fi
+	}
+
+	if [ "$ft_mode" = "1" ]
+	then
+		if [ "$ft_ret" != "0" ]
+		then
+			elog "INFO: boot_check failed $ft_ret"
+			dmesg > /data/usr/log/dmesg.log
+			#red led is set
+			gpio 1 0
+			gpio 2 1
+			gpio 3 1
+		else
+			echo 3 > /proc/xiaoqiang/boot_status
+		fi
+	else
+		echo 3 > /proc/xiaoqiang/boot_status
+	fi
+}
+
+stop() {
+	echo "stop"
+}

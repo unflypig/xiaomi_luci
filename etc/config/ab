@@ -1,0 +1,14 @@
+
+config ab 'settings'
+	option name 'settings'
+	option enabled '1'
+	option max_log_num '5'
+	option log4 '02/04/16 04:09:32: flag: 1 up: 36900.16 down: 50097.71'
+	option log5 '03/12/16 09:30:37: flag: 1 up: 28241.53 down: 49009.31'
+	option log1 '03/20/16 17:08:30: flag: 1 up: 39256.23 down: 54625.2'
+	option log2 '03/22/16 06:00:41: flag: 2 up: 22593.25 down: 48948.11'
+	option log3 '03/29/16 21:11:37: flag: 1 up: 38116.57 down: 49686.08'
+	option current_log_num '4'
+	option last_speedtest_date '03/29/16 21:11:37'
+	option last_speedtest_time '1459257097'
+

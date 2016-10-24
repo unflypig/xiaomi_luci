@@ -1,0 +1,4 @@
+scan_ralink_wifi(mt7620,mt7620,,)
+sync_uci_with_dat(mt7620,/etc/Wireless/mt7620/mt7620.dat,,)
+enable_ralink_wifi(mt7620,mt7620,,)
+ap  mi wl2

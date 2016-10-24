@@ -1,0 +1,67 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+restore_nvram () {
+	restore=`nvram get restore_defaults`
+	country=`nvram get CountryCode`
+	if [ "$restore" = "1" ]; then
+		flag_name=`uci get misc.mount_bind_etc.flag_name`
+		nvram set $flag_name=1
+		mtd erase overlay
+	fi
+	wl0_ssid=`nvram get wl0_ssid`
+	if [ -z "$wl0_ssid" ]; then
+		nvram_corrupt=1
+	fi
+	ft_mode=`cat /proc/xiaoqiang/ft_mode`
+	if [ "$ft_mode" != "1" ]; then
+		nvam_sn=`nvram get SN`
+		if [ -z "$nvam_sn" ]; then
+			nvram_corrupt=1
+		fi
+	fi
+
+
+	#restore: 1, 恢复出厂设置；2，ota升级
+	#nvram_corrupt: 1, nvram被破坏
+	if [ -s /usr/share/xiaoqiang/xiaoqiang-defaults.txt ]; then
+		if [ "$restore" = "1" ] || [ "$restore" = "2" ] || [ "$nvram_corrupt" = "1"  ]; then
+			if [ "$restore" = "1" ]; then
+				nvram clear /usr/share/xiaoqiang/xiaoqiang-reserved.txt
+			fi
+
+			cat /usr/share/xiaoqiang/xiaoqiang-defaults.txt | while read line
+			do
+			        nvram set "$line"
+			done
+
+			bdata sync
+
+			if [ "$restore" = "2" ];then
+				nvram set CountryCode=$country
+			fi
+
+			if [ "$restore" = "1" ];then
+                                num=`nvram get wl1_ssid | cut -b 8-11`
+                                temp=0x"$num"
+                                newnum="000"`printf "%x\n" $((0xffff-$temp))`
+                                pos=`expr length $newnum - 4`
+                                newnum=`echo ${newnum:$pos:4} | tr [a-z] [A-Z]`
+                                ssid2G=`nvram get wl1_ssid`
+                                ssid5G=`nvram get wl0_ssid | cut -b -11`
+                                result2G=`echo $ssid2G"_"$newnum`
+                                result5G=`echo $ssid5G"_"$newnum"_5G"`
+                                nvram set wl1_ssid=$result2G
+                                nvram set wl0_ssid=$result5G
+                        fi
+
+			nvram commit
+
+			echo "nvram restore done."
+		fi
+	fi
+
+}
+
+boot_hook_add preinit_main restore_nvram

@@ -1,0 +1,153 @@
+#!/bin/sh
+# Copyright (C) 2009-2012 OpenWrt.org
+# Copyright (C) 2010 Vertical Communications
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+. /lib/functions/block.sh
+
+model=`nvram get model`
+blkdev=`dirname $DEVPATH`
+device=`basename $DEVPATH`
+
+mount_flag=1
+if [ `basename $blkdev` != "block" ]; then
+	mount_flag=0
+else
+	substr=$(echo $device|cut -c-2)
+	partitions=`cat /proc/partitions | grep $device | wc -l`
+	if [ $substr = "sd" -a $partitions -le 1 ]; then
+		mount_flag=0
+	fi
+fi
+
+proc_gpt_rsvd $device
+[ "$?" = "1" ] && exit 0
+
+if [ $mount_flag -eq 0 ]; then
+
+	#mountpoint=`sed -ne "s|^[^ ]*/$device ||; T; s/ .*//p" /proc/self/mounts | grep -v uploadfiles`
+	mountpoint=`cat /proc/self/mounts | grep $device | awk '{print $2}' | grep -v appdata`
+
+	case "$ACTION" in
+	add)
+
+		local from_fstab
+		local anon_mount
+		local anon_swap
+		local anon_fsck
+		local mds_mount_target
+		local mds_mount_device
+		local mds_mount_fstype
+		local sds_swap_device
+		local use_device
+		local do_fsck=0
+		local fsck_type
+		
+		local autoswap_from_fstab
+		local automount_from_fstab
+
+		#skip any system partition
+		is_sys=`getdisk sysdisk $device`
+		[ "$is_sys" = "0" ] && exit 0
+
+		#skip any already mounted partition
+		cat /proc/mounts | grep -q $device && exit 0
+
+		mount_dev_section_cb() {
+			mds_mount_target="$2"
+			mds_mount_device="$3"
+			mds_mount_fstype="$4"
+			mds_mount_enabled="$6"
+		}
+
+		swap_dev_section_cb() {
+			sds_swap_device="$2"
+			return 0
+		}
+		config_get_automount
+		automount_from_fstab="$from_fstab"
+		[ "$automount_from_fstab" -eq 1 ] && {
+			config_get_mount_section_by_device "/dev/$device"
+			use_device="$mds_mount_device"
+			[ "$mds_mount_enabled" -eq 1 ] && {
+				if [ -n "$mds_mount_target" ]; then
+					grep -q "/dev/$device" /proc/swaps 2>/dev/null || grep -q "/dev/$device" /proc/mounts || {
+						( mkdir -p "$mds_mount_target" && mount "$mds_mount_target" ) 2>&1 | tee /proc/self/fd/2 | logger -t 'fstab'
+					}
+				else
+					logger -t 'fstab' "Mount enabled for $mds_mount_device but it doesn't have a defined mountpoint (target)"
+				fi
+			}
+		}
+
+		[ -z "$use_device" ] && {
+			config_get_autoswap
+			autoswap_from_fstab="$from_fstab"
+		
+			[ "$autoswap_from_fstab" -eq 1 ] && {
+				config_get_swap_section_by_device "/dev/$device"
+				use_device="$sds_swap_device"
+			}
+		}
+		
+		grep -q "/dev/$device" /proc/swaps 2>/dev/null || grep -q "/dev/$device" /proc/mounts || {
+			[ "$anon_mount" -eq 1 -a -z "$use_device" ] && {
+				case "$device" in
+					mtdblock*) ;;
+					*)
+						probe_type=`getdisk fs /dev/$device`
+						case $probe_type in
+							"ntfs")
+								mnt_type="-t tntfs"
+								mnt_opt="-o noatime,readahead=1M,umask=0000"
+								fsck="ntfsck -t 30"
+								;;
+							"exfat")
+								mnt_type="-t texfat"
+								mnt_opt="-o noatime,readahead=1M,umask=0000"
+								fsck="exfatck -t 30"
+								logger -s -p 3 -t "Hotplug" "EXFAT is not longger supported"
+								return 0
+								;;
+							"vfat")
+								mnt_type="-t tfat"
+								mnt_opt="-o noatime,readahead=1M,umask=0000"
+								fsck="fatfsck -t 30"
+								;;
+							*)
+								mnt_type=""
+								mnt_opt=""
+								[ -z "$probe_type" ] || mnt_type="-t $probe_type"
+								;;
+						esac
+
+
+						mkdir -p /extdisks/$device
+						mount $mnt_type $mnt_opt /dev/$device /extdisks/$device
+						if [ "$?" = "0" ] ; then
+							dmesg  | tail -n 5 | grep $device | grep -q dirty
+							if [ "$?" = "0" ] ; then
+								echo "/dev/$device" >> /tmp/.dirty_part
+#								mount -o remount,ro /extdisks/$device
+								logger -s -p 3 -t "Hotplug" "$device: Dirty $probe_type partition"
+							fi
+						else
+							logger -s -p 3 -t "Hotplug" "$device: Mount failed. Code=$?"
+						fi
+					;;
+				esac
+			}
+		}
+		reset_dev_section_cb
+		;;
+	remove)
+		#umount /dev/$device
+		#umount $mountpoint
+#		sed -i "/$device/d" /tmp/.dirty_part
+		;;
+	esac
+
+fi
+

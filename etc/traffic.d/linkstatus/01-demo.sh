@@ -1,0 +1,1 @@
+#echo "port change: $LINK_STATUS $PORT_NUM" > /tmp/linkstatus.log

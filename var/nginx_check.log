@@ -1,0 +1,9 @@
+Error while opening the file.
+: No such file or directory
+nginx: [emerg] "" usb root is  in /tmp/sysapihttpdconf/sysapihttpd.conf:322
+nginx: [warn] the "log_format" directive may be used only on "http" level in /tmp/sysapihttpdconf/sysapihttpd.conf:339
+nginx: [warn] the "log_format" directive may be used only on "http" level in /tmp/sysapihttpdconf/sysapihttpd.conf:359
+nginx: the configuration file /tmp/sysapihttpdconf/sysapihttpd.conf syntax is ok
+2016/03/29 21:23:53 [emerg] 12026#0: Initializing MiWiFi toolbar shared context...
+nginx: configuration file /tmp/sysapihttpdconf/sysapihttpd.conf test is successful
+ngx_http_load_usb

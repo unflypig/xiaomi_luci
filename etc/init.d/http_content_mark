@@ -1,0 +1,44 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+
+set_switch_on="uci set http_content_mark.settings.enabled=1"
+set_switch_off="uci set http_content_mark.settings.enabled=0"
+set_switch_commit="uci commit http_content_mark"
+HTTP_MARK_SH="/usr/sbin/http_content_type_mark.sh"
+
+export EXTRA_COMMANDS=" on off "
+export EXTRA_HELP="	on	Switch to the start state and start
+	off	Switch to the stop state and stop"
+
+start() {
+    switch=`uci get http_content_mark.settings.enabled -q`
+    if [ $switch -ne "1" ]; then
+        #if not enabled, just exit
+        return 0
+    fi
+
+    $HTTP_MARK_SH on
+    return 0
+}
+
+stop() {
+    $HTTP_MARK_SH off
+    return 0
+}
+
+off() {
+    $set_switch_off >/dev/null 2>&1
+    $set_switch_commit >/dev/null 2>&1
+    stop
+    return $?
+}
+
+on() {
+    $set_switch_on >/dev/null 2>&1
+    $set_switch_commit >/dev/null 2>&1
+
+    start
+    return $?
+}
+

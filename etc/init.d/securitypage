@@ -1,0 +1,50 @@
+#!/bin/sh /etc/rc.common
+
+STOP=21
+
+export PROCLINE="/usr/sbin/securitypage -c /etc/config/securitypage/securitycenter.conf"
+
+ENABELTAG="/etc/config/securitypage/enable.tag"
+
+start() {
+        if [ -f $ENABELTAG ];
+        then
+          echo "security page enabled."
+        else
+          return $?
+        fi	
+
+	uci set rule_mgr.switch.tencent_security=1; uci commit
+	/etc/init.d/rule_mgr start
+	echo 1 > /proc/sys/net/ipv4/http_security_switch
+
+	/usr/sbin/supervisord start
+	return $?
+}
+
+restart() {
+	stop
+	sleep 1
+	start
+	return $?
+}
+
+shutdown() {
+	stop
+	return $?
+}
+
+stop() {
+	uci set rule_mgr.switch.tencent_security=0; uci commit
+	/etc/init.d/rule_mgr stop
+	echo 0 > /proc/sys/net/ipv4/http_security_switch
+
+	/usr/sbin/supervisord stop
+	return $?
+}
+
+status() {
+	/usr/sbin/supervisord status
+	return $?
+}
+#

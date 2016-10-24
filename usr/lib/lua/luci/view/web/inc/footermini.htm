@@ -1,0 +1,10 @@
+<%
+local XQSysUtil = require "xiaoqiang.util.XQSysUtil"
+local misc = XQSysUtil.getMiscHardwareInfo()
+local bbsUrl = misc.bbs
+local xqCountryCode = require "xiaoqiang.XQCountryCode"
+local ccode = xqCountryCode.getCurrentCountryCode()
+%>
+    <div id="ft">
+        <p>&copy; 2015 <%:小米路由器%><span>|</span><a href="http://www1.miwifi.com" target="_blank"><%:官方网站%></a><span>|</span><a href="http://weibo.com/xiaomiluyouqi" target="_blank"><%:官方微博%></a><span>|</span><a href="https://land.xiaomi.net/res/e1fdbc3/land/miwifi/wf_2dcode.jpg" target="_blank" id="wechatcode"><%if (ccode=='HK') then%>WeChat<%elseif (ccode=='TW') then%>WeChat<%else%><%:官方微信%><%end%></a><span>|</span><a href="<%if (ccode=='HK') then%>http://hk.miui.com/forum.php<%elseif (ccode=='TW') then%>http://tw.miui.com/forum.php<%else%><%=bbsUrl%><%end%>" target="_blank"><%:用户社区%></a><span>|</span><a target="_blank" href="http://www1.miwifi.com/miwifi_faq.html"><%:常见问题%></a><%if (ccode=='HK') then%><span>|</span><a target="_blank" href="https://www.facebook.com/xiaomihongkong">Facebook</a><%elseif (ccode=='TW') then%><span>|</span><a target="_blank" href="https://www.facebook.com/xiaomitaiwan">Facebook</a><%else%><%end%><span>|</span><%:服务热线%>  <%if (ccode=='HK') then%>+852 30011888<%elseif (ccode=='TW') then%>02-21921023<%else%>400-100-5678<%end%><p>
+    </div>

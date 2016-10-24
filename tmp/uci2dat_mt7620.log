@@ -1,0 +1,481 @@
+---- devname="mt7620"
+---- datpath="/etc/Wireless/mt7620/mt7620.dat"
+update_router_inittd(), L1490
+update_router_inittd(), core: common
+update_router_inittd(), error L1535 2 len 1
+API: init_wifi_cfg()
+init_wifi_cfg(), wifi-device: mt7612
+init_wifi_cfg(), wifi-device: mt7620
+API: parse_dat(mt7620, /etc/Wireless/mt7620/mt7620.dat)
+  0."CountryRegion=1", <CountryRegion>=<1>
+  1."CountryRegionABand=0", <CountryRegionABand>=<0>
+  2."CountryCode=CN", <CountryCode>=<CN>
+  3."BssidNum=3", <BssidNum>=<3>
+  4."SSID1=jmdvirus", <SSID1>=<jmdvirus>
+  5."SSID2=miwifi_ready", <SSID2>=<miwifi_ready>
+  6."SSID3=Xiaomi_Hello_910F", <SSID3>=<Xiaomi_Hello_910F>
+  7."SSID4=", <SSID4>=<>
+  8."WirelessMode=9", <WirelessMode>=<9>
+  9."TxRate=0", <TxRate>=<0>
+ 10."Bsd=0", <Bsd>=<0>
+ 11."Channel=0", <Channel>=<0>
+ 12."BasicRate=15", <BasicRate>=<15>
+ 13."BeaconPeriod=100", <BeaconPeriod>=<100>
+ 14."DtimPeriod=1", <DtimPeriod>=<1>
+ 15."TxPower=100", <TxPower>=<100>
+ 16."EntryLifeCheck=64", <EntryLifeCheck>=<64>
+ 17."DisableOLBC=0", <DisableOLBC>=<0>
+ 18."BGProtection=0", <BGProtection>=<0>
+ 19."MaxStaNum=0", <MaxStaNum>=<0>
+ 20."TxAntenna=", <TxAntenna>=<>
+ 21."RxAntenna=", <RxAntenna>=<>
+ 22."TxPreamble=0", <TxPreamble>=<0>
+ 23."RTSThreshold=2347", <RTSThreshold>=<2347>
+ 24."FragThreshold=2346", <FragThreshold>=<2346>
+ 25."TxBurst=1", <TxBurst>=<1>
+ 26."PktAggregate=0", <PktAggregate>=<0>
+ 27."TurboRate=0", <TurboRate>=<0>
+ 28."WmmCapable=1", <WmmCapable>=<1>
+ 29."APSDCapable=1", <APSDCapable>=<1>
+ 30."DLSCapable=0", <DLSCapable>=<0>
+ 31."APAifsn=3;7;1;1", <APAifsn>=<3;7;1;1>
+ 32."APCwmin=4;4;3;2", <APCwmin>=<4;4;3;2>
+ 33."APCwmax=6;10;4;3", <APCwmax>=<6;10;4;3>
+ 34."APTxop=0;0;94;47", <APTxop>=<0;0;94;47>
+ 35."APACM=0;0;0;0", <APACM>=<0;0;0;0>
+ 36."BSSAifsn=3;7;2;2", <BSSAifsn>=<3;7;2;2>
+ 37."BSSCwmin=4;4;3;2", <BSSCwmin>=<4;4;3;2>
+ 38."BSSCwmax=10;10;4;3", <BSSCwmax>=<10;10;4;3>
+ 39."BSSTxop=0;0;94;47", <BSSTxop>=<0;0;94;47>
+ 40."BSSACM=0;0;0;0", <BSSACM>=<0;0;0;0>
+ 41."AckPolicy=0;0;0;0", <AckPolicy>=<0;0;0;0>
+ 42."NoForwarding=0;0;1;", <NoForwarding>=<0;0;1;>
+ 43."NoForwardingBTNBSSID=0", <NoForwardingBTNBSSID>=<0>
+ 44."HideSSID=0;1;0", <HideSSID>=<0;1;0>
+ 45."StationKeepAlive=0", <StationKeepAlive>=<0>
+ 46."ShortSlot=1", <ShortSlot>=<1>
+ 47."AutoChannelSelect=2", <AutoChannelSelect>=<2>
+ 48."IEEE8021X=0", <IEEE8021X>=<0>
+ 49."IEEE80211H=0", <IEEE80211H>=<0>
+ 50."CSPeriod=10", <CSPeriod>=<10>
+ 51."WirelessEvent=1", <WirelessEvent>=<1>
+ 52."IdsEnable=0", <IdsEnable>=<0>
+ 53."AuthFloodThreshold=32", <AuthFloodThreshold>=<32>
+ 54."AssocReqFloodThreshold=32", <AssocReqFloodThreshold>=<32>
+ 55."ReassocReqFloodThreshold=32", <ReassocReqFloodThreshold>=<32>
+ 56."ProbeReqFloodThreshold=32", <ProbeReqFloodThreshold>=<32>
+ 57."DisassocFloodThreshold=32", <DisassocFloodThreshold>=<32>
+ 58."DeauthFloodThreshold=32", <DeauthFloodThreshold>=<32>
+ 59."EapReqFooldThreshold=32", <EapReqFooldThreshold>=<32>
+ 60."PreAuth=0", <PreAuth>=<0>
+ 61."AuthMode=WPAPSKWPA2PSK;OPEN;OPEN", <AuthMode>=<WPAPSKWPA2PSK;OPEN;OPEN>
+ 62."EncrypType=TKIPAES;NONE;NONE", <EncrypType>=<TKIPAES;NONE;NONE>
+ 63."RekeyInterval=0", <RekeyInterval>=<0>
+ 64."PMKCachePeriod=10", <PMKCachePeriod>=<10>
+ 65."WPAPSK1=2301302ab", <WPAPSK1>=<2301302ab>
+ 66."WPAPSK2=", <WPAPSK2>=<>
+ 67."WPAPSK3=", <WPAPSK3>=<>
+ 68."WPAPSK4=", <WPAPSK4>=<>
+ 69."DefaultKeyID=1", <DefaultKeyID>=<1>
+ 70."Key1Type=0", <Key1Type>=<0>
+ 71."Key1Str1=", <Key1Str1>=<>
+ 72."Key1Str2=", <Key1Str2>=<>
+ 73."Key1Str3=", <Key1Str3>=<>
+ 74."Key1Str4=", <Key1Str4>=<>
+ 75."Key2Type=0", <Key2Type>=<0>
+ 76."Key2Str1=", <Key2Str1>=<>
+ 77."Key2Str2=", <Key2Str2>=<>
+ 78."Key2Str3=", <Key2Str3>=<>
+ 79."Key2Str4=", <Key2Str4>=<>
+ 80."Key3Type=0", <Key3Type>=<0>
+ 81."Key3Str1=", <Key3Str1>=<>
+ 82."Key3Str2=", <Key3Str2>=<>
+ 83."Key3Str3=", <Key3Str3>=<>
+ 84."Key3Str4=", <Key3Str4>=<>
+ 85."Key4Type=0", <Key4Type>=<0>
+ 86."Key4Str1=", <Key4Str1>=<>
+ 87."Key4Str2=", <Key4Str2>=<>
+ 88."Key4Str3=", <Key4Str3>=<>
+ 89."Key4Str4=", <Key4Str4>=<>
+ 90."AccessPolicy0=2", <AccessPolicy0>=<2>
+ 91."AccessControlList0=D4:6E:5C:20:D4:BD", <AccessControlList0>=<D4:6E:5C:20:D4:BD>
+ 92."AccessPolicy1=0", <AccessPolicy1>=<0>
+ 93."AccessControlList1=", <AccessControlList1>=<>
+ 94."AccessPolicy2=2", <AccessPolicy2>=<2>
+ 95."AccessControlList2=D4:6E:5C:20:D4:BD", <AccessControlList2>=<D4:6E:5C:20:D4:BD>
+ 96."AccessPolicy3=0", <AccessPolicy3>=<0>
+ 97."AccessControlList3=", <AccessControlList3>=<>
+ 98."WdsEnable=0", <WdsEnable>=<0>
+ 99."WdsEncrypType=NONE", <WdsEncrypType>=<NONE>
+100."WdsList=EOF", <WdsList>=<EOF>
+101."Wds0Key=", <Wds0Key>=<>
+102."Wds1Key=", <Wds1Key>=<>
+103."Wds2Key=", <Wds2Key>=<>
+104."Wds3Key=", <Wds3Key>=<>
+105."RADIUS_Server=192.168.2.3", <RADIUS_Server>=<192.168.2.3>
+106."RADIUS_Port=1812", <RADIUS_Port>=<1812>
+107."RADIUS_Key1=ralink", <RADIUS_Key1>=<ralink>
+108."RADIUS_Key2=", <RADIUS_Key2>=<>
+109."RADIUS_Key3=", <RADIUS_Key3>=<>
+110."RADIUS_Key4=", <RADIUS_Key4>=<>
+111."own_ip_addr=192.168.5.234", <own_ip_addr>=<192.168.5.234>
+112."EAPifname=br0", <EAPifname>=<br0>
+113."PreAuthifname=br0", <PreAuthifname>=<br0>
+114."HT_HTC=0", <HT_HTC>=<0>
+115."HT_RDG=0", <HT_RDG>=<0>
+116."HT_EXTCHA=0", <HT_EXTCHA>=<0>
+117."HT_LinkAdapt=0", <HT_LinkAdapt>=<0>
+118."HT_OpMode=0", <HT_OpMode>=<0>
+119."HT_MpduDensity=5", <HT_MpduDensity>=<5>
+120."HT_BW=0", <HT_BW>=<0>
+121."VHT_BW=0", <VHT_BW>=<0>
+122."VHT_SGI=1", <VHT_SGI>=<1>
+123."VHT_STBC=0", <VHT_STBC>=<0>
+124."VHT_BW_SIGNAL=0", <VHT_BW_SIGNAL>=<0>
+125."VHT_DisallowNonVHT=", <VHT_DisallowNonVHT>=<>
+126."VHT_LDPC=0", <VHT_LDPC>=<0>
+127."HT_AutoBA=1", <HT_AutoBA>=<1>
+128."HT_AMSDU=0", <HT_AMSDU>=<0>
+129."HT_BAWinSize=64", <HT_BAWinSize>=<64>
+130."HT_GI=1", <HT_GI>=<1>
+131."HT_MCS=33", <HT_MCS>=<33>
+132."WscManufacturer=xiaomi", <WscManufacturer>=<xiaomi>
+133."WscModelName=R1CM", <WscModelName>=<R1CM>
+134."WscDeviceName=XiaoMiRouter", <WscDeviceName>=<XiaoMiRouter>
+135."WscModelNumber=0002", <WscModelNumber>=<0002>
+136."WscSerialNumber=", <WscSerialNumber>=<>
+137."GuestWpsDevice=XiaoMiRouter_guest", <GuestWpsDevice>=<XiaoMiRouter_guest>
+138."RadioOn=1", <RadioOn>=<1>
+139."FixedTxMode=0", <FixedTxMode>=<0>
+140."AutoProvisionEn=0", <AutoProvisionEn>=<0>
+141."FreqDelta=0", <FreqDelta>=<0>
+142."CarrierDetect=0", <CarrierDetect>=<0>
+143."ITxBfEn=0", <ITxBfEn>=<0>
+144."PreAntSwitch=1", <PreAntSwitch>=<1>
+145."PhyRateLimit=0", <PhyRateLimit>=<0>
+146."DebugFlags=0", <DebugFlags>=<0>
+147."ETxBfEnCond=0", <ETxBfEnCond>=<0>
+148."ITxBfTimeout=0", <ITxBfTimeout>=<0>
+149."ETxBfNoncompress=0", <ETxBfNoncompress>=<0>
+150."ETxBfIncapable=0", <ETxBfIncapable>=<0>
+151."FineAGC=0", <FineAGC>=<0>
+152."StreamMode=0", <StreamMode>=<0>
+153."StreamModeMac0=", <StreamModeMac0>=<>
+154."StreamModeMac1=", <StreamModeMac1>=<>
+155."StreamModeMac2=", <StreamModeMac2>=<>
+156."StreamModeMac3=", <StreamModeMac3>=<>
+157."RDRegion=", <RDRegion>=<>
+158."DfsLowerLimit=0", <DfsLowerLimit>=<0>
+159."DfsUpperLimit=0", <DfsUpperLimit>=<0>
+160."DfsOutdoor=0", <DfsOutdoor>=<0>
+161."SymRoundFromCfg=0", <SymRoundFromCfg>=<0>
+162."BusyIdleFromCfg=0", <BusyIdleFromCfg>=<0>
+163."DfsRssiHighFromCfg=0", <DfsRssiHighFromCfg>=<0>
+164."DfsRssiLowFromCfg=0", <DfsRssiLowFromCfg>=<0>
+165."DFSParamFromConfig=0", <DFSParamFromConfig>=<0>
+166."FCCParamCh0=", <FCCParamCh0>=<>
+167."FCCParamCh1=", <FCCParamCh1>=<>
+168."FCCParamCh2=", <FCCParamCh2>=<>
+169."FCCParamCh3=", <FCCParamCh3>=<>
+170."CEParamCh0=", <CEParamCh0>=<>
+171."CEParamCh1=", <CEParamCh1>=<>
+172."CEParamCh2=", <CEParamCh2>=<>
+173."CEParamCh3=", <CEParamCh3>=<>
+174."JAPParamCh0=", <JAPParamCh0>=<>
+175."JAPParamCh1=", <JAPParamCh1>=<>
+176."JAPParamCh2=", <JAPParamCh2>=<>
+177."JAPParamCh3=", <JAPParamCh3>=<>
+178."JAPW53ParamCh0=", <JAPW53ParamCh0>=<>
+179."JAPW53ParamCh1=", <JAPW53ParamCh1>=<>
+180."JAPW53ParamCh2=", <JAPW53ParamCh2>=<>
+181."JAPW53ParamCh3=", <JAPW53ParamCh3>=<>
+182."FixDfsLimit=0", <FixDfsLimit>=<0>
+183."LongPulseRadarTh=0", <LongPulseRadarTh>=<0>
+184."AvgRssiReq=0", <AvgRssiReq>=<0>
+185."DFS_R66=0", <DFS_R66>=<0>
+186."BlockCh=", <BlockCh>=<>
+187."GreenAP=0", <GreenAP>=<0>
+188."WapiPsk1=", <WapiPsk1>=<>
+189."WapiPsk2=", <WapiPsk2>=<>
+190."WapiPsk3=", <WapiPsk3>=<>
+191."WapiPsk4=", <WapiPsk4>=<>
+192."WapiPsk5=", <WapiPsk5>=<>
+193."WapiPsk6=", <WapiPsk6>=<>
+194."WapiPsk7=", <WapiPsk7>=<>
+195."WapiPsk8=", <WapiPsk8>=<>
+196."WapiPskType=", <WapiPskType>=<>
+197."Wapiifname=", <Wapiifname>=<>
+198."WapiAsCertPath=", <WapiAsCertPath>=<>
+199."WapiUserCertPath=", <WapiUserCertPath>=<>
+200."WapiAsIpAddr=", <WapiAsIpAddr>=<>
+201."WapiAsPort=", <WapiAsPort>=<>
+202."RekeyMethod=DISABLE", <RekeyMethod>=<DISABLE>
+203."MeshAutoLink=0", <MeshAutoLink>=<0>
+204."MeshAuthMode=", <MeshAuthMode>=<>
+205."MeshEncrypType=", <MeshEncrypType>=<>
+206."MeshDefaultkey=0", <MeshDefaultkey>=<0>
+207."MeshWEPKEY=", <MeshWEPKEY>=<>
+208."MeshWPAKEY=", <MeshWPAKEY>=<>
+209."MeshId=", <MeshId>=<>
+210."HSCounter=0", <HSCounter>=<0>
+211."HT_BADecline=0", <HT_BADecline>=<0>
+212."HT_STBC=0", <HT_STBC>=<0>
+213."HT_LDPC=0", <HT_LDPC>=<0>
+214."HT_TxStream=2", <HT_TxStream>=<2>
+215."HT_RxStream=2", <HT_RxStream>=<2>
+216."HT_PROTECT=1", <HT_PROTECT>=<1>
+217."HT_DisallowTKIP=0", <HT_DisallowTKIP>=<0>
+218."HT_BSSCoexistence=0", <HT_BSSCoexistence>=<0>
+219."WscConfMode=6;6;6", <WscConfMode>=<6;6;6>
+220."WscConfStatus=2", <WscConfStatus>=<2>
+221."WCNTest=0", <WCNTest>=<0>
+222."WdsPhyMode=", <WdsPhyMode>=<>
+223."RADIUS_Acct_Server=", <RADIUS_Acct_Server>=<>
+224."RADIUS_Acct_Port=1813", <RADIUS_Acct_Port>=<1813>
+225."RADIUS_Acct_Key=", <RADIUS_Acct_Key>=<>
+226."Ethifname=", <Ethifname>=<>
+227."session_timeout_interval=0", <session_timeout_interval>=<0>
+228."idle_timeout_interval=0", <idle_timeout_interval>=<0>
+229."WiFiTest=0", <WiFiTest>=<0>
+230."TGnWifiTest=0", <TGnWifiTest>=<0>
+231."ApCliEnable=0", <ApCliEnable>=<0>
+232."ApCliSsid=", <ApCliSsid>=<>
+233."ApCliBssid=", <ApCliBssid>=<>
+234."ApCliAuthMode=", <ApCliAuthMode>=<>
+235."ApCliEncrypType=", <ApCliEncrypType>=<>
+236."ApCliWPAPSK=", <ApCliWPAPSK>=<>
+237."ApCliDefaultKeyID=0", <ApCliDefaultKeyID>=<0>
+238."ApCliKey1Type=0", <ApCliKey1Type>=<0>
+239."ApCliKey1Str=", <ApCliKey1Str>=<>
+240."ApCliKey2Type=0", <ApCliKey2Type>=<0>
+241."ApCliKey2Str=", <ApCliKey2Str>=<>
+242."ApCliKey3Type=0", <ApCliKey3Type>=<0>
+243."ApCliKey3Str=", <ApCliKey3Str>=<>
+244."ApCliKey4Type=0", <ApCliKey4Type>=<0>
+245."ApCliKey4Str=", <ApCliKey4Str>=<>
+246."EfuseBufferMode=0", <EfuseBufferMode>=<0>
+247."E2pAccessMode=2", <E2pAccessMode>=<2>
+248."BW_Enable=0", <BW_Enable>=<0>
+249."BW_Root=0", <BW_Root>=<0>
+250."BW_Priority=", <BW_Priority>=<>
+251."BW_Guarantee_Rate=", <BW_Guarantee_Rate>=<>
+252."BW_Maximum_Rate=", <BW_Maximum_Rate>=<>
+253."AutoChannelSkipList=12;13;", <AutoChannelSkipList>=<12;13;>
+254."WscConfMethod=", <WscConfMethod>=<>
+255."WscKeyASCII=", <WscKeyASCII>=<>
+256."WscSecurityMode=0", <WscSecurityMode>=<0>
+257."Wsc4digitPinCode=", <Wsc4digitPinCode>=<>
+258."WscVendorPinCode=", <WscVendorPinCode>=<>
+259."WscV2Support=", <WscV2Support>=<>
+API: parse_uci((null))
+parse_uci(), wifi-device: mt7612
+parse_uci(),    region=1
+parse_uci(),    aregion=0
+parse_uci(),    country=CN
+parse_uci(),    channel=0
+parse_uci(),    txpwr=mid
+parse_uci(),    autoch=2
+parse_uci(),    bw=0
+parse_uci(),    radio=1
+parse_uci(), wifi-device: mt7620
+parse_uci(),    region=1
+parse_uci(),    aregion=0
+parse_uci(),    country=CN
+parse_uci(),    channel=0
+parse_uci(),    txpwr=max
+parse_uci(),    autoch=2
+parse_uci(),    bw=0
+parse_uci(),    radio=1
+parse_uci(),    autoch_skip=12;13; 
+parse_uci(), wifi-iface: wl0
+parse_uci(),    ssid=jmdvirus_5G
+parse_uci(),    hidden=0
+parse_uci(),    key=2301302ab
+parse_uci(),    encryption=psk-mixed
+parse_uci(),    cipher=tkip+ccmp
+parse_uci(),    bsd=0
+parse_uci(),    macfilter0=2 maclist=
+parse_uci(),    maclist=D4:6E:5C:20:D4:BD
+parse_uci(), wifi-iface: wl1
+parse_uci(),    ssid=jmdvirus
+parse_uci(),    hidden=0
+parse_uci(),    key=2301302ab
+parse_uci(),    encryption=psk-mixed
+parse_uci(),    cipher=tkip+ccmp
+parse_uci(),    bsd=0
+parse_uci(),    macfilter0=2 maclist=D4:6E:5C:20:D4:BD
+parse_uci(),    maclist=D4:6E:5C:20:D4:BD
+parse_uci(), wifi-iface: wl2
+parse_uci(),    ssid=miwifi_ready
+parse_uci(),    hidden=1
+parse_uci(),    encryption=none
+parse_uci(),    cipher=NONE
+parse_uci(), wifi-iface: wl3
+parse_uci(),    ssid=Xiaomi_Hello_910F
+parse_uci(),    encryption=none
+parse_uci(),    cipher=NONE
+parse_uci(),    noforward=0;0;1;
+parse_uci(),    macfilter2=2 maclist=D4:6E:5C:20:D4:BD
+parse_uci(),    maclist=D4:6E:5C:20:D4:BD
+API: gen_dat(mt7620, /etc/Wireless/mt7620/mt7620.dat)
+hooker(),CountryRegion=1, def="1"
+hooker(),CountryRegionABand=0, def="0"
+hooker(),CountryCode=CN, def="CN"
+hooker(),BssidNum=3, def="1"
+hooker(),SSID1=jmdvirus, def="OpenWrt"
+hooker(),SSID2=miwifi_ready, def=""
+hooker(),SSID3=Xiaomi_Hello_910F, def=""
+hooker(),SSID4=<def>, def=""
+hooker(),WirelessMode=9, def="9"
+hooker(),TxRate=0, def="0"
+hooker(),Bsd=0, def="0"
+hooker(),Channel=0, def="0"
+hooker(),BasicRate=15, def="15"
+hooker(),BeaconPeriod=100, def="100"
+hooker(),DtimPeriod=1, def="1"
+hooker(),TxPower=100, def="100"
+hooker(),EntryLifeCheck=64, def="0"
+hooker(),DisableOLBC=0, def="0"
+hooker(),BGProtection=0, def="0"
+hooker(),MaxStaNum=0, def="0"
+hooker(),TxAntenna=<def>, def=""
+hooker(),RxAntenna=<def>, def=""
+hooker(),TxPreamble=0, def="0"
+hooker(),RTSThreshold=2347, def="2347"
+hooker(),FragThreshold=2346, def="2346"
+hooker(),TxBurst=1, def="1"
+hooker(),PktAggregate=0, def="0"
+hooker(),TurboRate=0, def="0"
+hooker(),WmmCapable=1, def="1"
+hooker(),APSDCapable=1, def="1"
+hooker(),DLSCapable=0, def="0"
+hooker(),APAifsn=3;7;1;1, def="3;7;1;1"
+hooker(),APCwmin=4;4;3;2, def="4;4;3;2"
+hooker(),APCwmax=6;10;4;3, def="6;10;4;3"
+hooker(),APTxop=0;0;94;47, def="0;0;94;47"
+hooker(),APACM=0;0;0;0, def="0;0;0;0"
+hooker(),BSSAifsn=3;7;2;2, def="3;7;2;2"
+hooker(),BSSCwmin=4;4;3;2, def="4;4;3;2"
+hooker(),BSSCwmax=10;10;4;3, def="10;10;4;3"
+hooker(),BSSTxop=0;0;94;47, def="0;0;94;47"
+hooker(),BSSACM=0;0;0;0, def="0;0;0;0"
+hooker(),AckPolicy=0;0;0;0, def="0;0;0;0"
+hooker(),NoForwarding=0;0;1;, def="0"
+hooker(),HideSSID=0, def="0"
+hooker(),HideSSID=;, def="0"
+hooker(),HideSSID=1, def="0"
+hooker(),HideSSID=;, def="0"
+hooker(),HideSSID=0, def="0"
+hooker(),ShortSlot=1, def="1"
+hooker(),AutoChannelSelect=2, def="2"
+hooker(),IEEE8021X=0, def="0"
+hooker(),IEEE80211H=0, def="0"
+hooker(),CSPeriod=10, def="10"
+hooker(),WirelessEvent=1, def="0"
+hooker(),IdsEnable=0, def="0"
+hooker(),PreAuth=0, def="0"
+hooker(),AuthMode=WPAPSKWPA2PSK, def="OPEN"
+hooker(),AuthMode=;, def="OPEN"
+hooker(),AuthMode=OPEN, def="OPEN"
+hooker(),AuthMode=;, def="OPEN"
+hooker(),AuthMode=OPEN, def="OPEN"
+hooker(),EncrypType=TKIPAES, def="NONE"
+hooker(),EncrypType=;, def="NONE"
+hooker(),EncrypType=NONE, def="NONE"
+hooker(),EncrypType=;, def="NONE"
+hooker(),EncrypType=NONE, def="NONE"
+hooker(),RekeyInterval=0, def="0"
+hooker(),PMKCachePeriod=10, def="10"
+hooker(),WPAPSK1=2301302ab, def=""
+hooker(),WPAPSK2=<def>, def=""
+hooker(),WPAPSK3=<def>, def=""
+hooker(),WPAPSK4=<def>, def=""
+hooker(),AccessControlList0=D4:6E:5C:20:D4:BD, def=""
+hooker(),AccessControlList2=D4:6E:5C:20:D4:BD, def=""
+hooker(),WdsEnable=0, def="0"
+hooker(),WdsEncrypType=NONE, def="NONE"
+hooker(),own_ip_addr=192.168.5.234, def="192.168.5.234"
+hooker(),EAPifname=br0, def=""
+hooker(),PreAuthifname=br0, def="br0"
+hooker(),HT_HTC=0, def="0"
+hooker(),HT_RDG=0, def="0"
+hooker(),HT_EXTCHA=0, def="0"
+hooker(),HT_LinkAdapt=0, def="0"
+hooker(),HT_OpMode=0, def="0"
+hooker(),HT_MpduDensity=5, def="5"
+bw_hooker(),HT_BW=0, def="0"
+bw_hooker(),VHT_BW=0, def="1"
+hooker(),VHT_SGI=1, def="1"
+hooker(),VHT_STBC=0, def="0"
+hooker(),VHT_BW_SIGNAL=0, def="0"
+hooker(),VHT_DisallowNonVHT=<def>, def=""
+hooker(),HT_AutoBA=1, def="1"
+hooker(),HT_AMSDU=0, def=""
+hooker(),HT_BAWinSize=64, def="64"
+hooker(),HT_GI=1, def="1"
+hooker(),HT_MCS=33, def="33"
+hooker(),WscManufacturer=xiaomi, def="xiaomi"
+hooker(),WscModelName=R1CM, def="R1CM"
+hooker(),WscDeviceName=XiaoMiRouter, def="XiaoMiRouter"
+hooker(),WscModelNumber=0002, def="0002"
+hooker(),WscSerialNumber=<def>, def=""
+hooker(),GuestWpsDevice=XiaoMiRouter_guest, def="XiaoMiRouter_guest"
+hooker(),RadioOn=1, def="1"
+hooker(),FixedTxMode=0, def="0"
+hooker(),AutoProvisionEn=0, def="0"
+hooker(),FreqDelta=0, def="0"
+hooker(),CarrierDetect=0, def="0"
+hooker(),ITxBfEn=0, def="0"
+hooker(),PreAntSwitch=1, def="1"
+hooker(),PhyRateLimit=0, def="0"
+hooker(),DebugFlags=0, def="0"
+hooker(),FineAGC=0, def="0"
+hooker(),StreamMode=0, def="0"
+hooker(),DfsLowerLimit=0, def="0"
+hooker(),DfsUpperLimit=0, def="0"
+hooker(),DfsOutdoor=0, def="0"
+hooker(),FixDfsLimit=0, def="0"
+hooker(),LongPulseRadarTh=0, def="0"
+hooker(),AvgRssiReq=0, def="0"
+hooker(),DFS_R66=0, def="0"
+hooker(),BlockCh=<def>, def=""
+hooker(),GreenAP=0, def="0"
+hooker(),MeshAutoLink=0, def="0"
+hooker(),MeshAuthMode=<def>, def=""
+hooker(),MeshEncrypType=<def>, def=""
+hooker(),MeshDefaultkey=0, def="0"
+hooker(),MeshWEPKEY=<def>, def=""
+hooker(),MeshWPAKEY=<def>, def=""
+hooker(),MeshId=<def>, def=""
+hooker(),HSCounter=0, def="0"
+hooker(),HT_BADecline=0, def="0"
+hooker(),HT_STBC=0, def="0"
+hooker(),HT_TxStream=2, def="1"
+hooker(),HT_RxStream=2, def="1"
+hooker(),HT_PROTECT=1, def="1"
+hooker(),HT_DisallowTKIP=0, def="0"
+bw_hooker(),HT_BSSCoexistence=0, def="0"
+hooker(),WscConfMode=6;6;6, def="7"
+hooker(),WCNTest=0, def="0"
+hooker(),WdsPhyMode=<def>, def=""
+hooker(),RADIUS_Acct_Server=<def>, def=""
+hooker(),RADIUS_Acct_Port=1813, def="1813"
+hooker(),RADIUS_Acct_Key=<def>, def=""
+hooker(),Ethifname=<def>, def=""
+hooker(),session_timeout_interval=0, def="0"
+hooker(),idle_timeout_interval=0, def="0"
+hooker(),TGnWifiTest=0, def="0"
+hooker(),EfuseBufferMode=0, def="0"
+hooker(),E2pAccessMode=2, def="2"
+hooker(),BW_Enable=0, def="0"
+hooker(),BW_Root=0, def="0"
+hooker(),BW_Priority=<def>, def=""
+hooker(),BW_Guarantee_Rate=<def>, def=""
+hooker(),BW_Maximum_Rate=<def>, def=""
+hooker(),AutoChannelSkipList=12;13;, def=""
+hooker(),WscConfMethod=<def>, def=""
+hooker(),WscKeyASCII=<def>, def=""
+hooker(),WscSecurityMode=0, def=""
+hooker(),Wsc4digitPinCode=<def>, def=""
+hooker(),WscVendorPinCode=<def>, def=""
+hooker(),WscV2Support=<def>, def=""

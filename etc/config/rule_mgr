@@ -1,0 +1,8 @@
+
+config cfg 'switch'
+	option security_center '0'
+	option cache_center '0'
+	option ad_filter_center '0'
+	option content_filter_center '0'
+	option tencent_security '0'
+

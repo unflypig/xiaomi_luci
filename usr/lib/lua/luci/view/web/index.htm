@@ -1,0 +1,1332 @@
+<%
+    local XQVersion = require "xiaoqiang.XQVersion"
+    local XQSysUtil = require "xiaoqiang.util.XQSysUtil"
+    local XQWifiUtil = require "xiaoqiang.util.XQWifiUtil"
+    local xqlanwanutil = require "xiaoqiang.util.XQLanWanUtil"
+    local XQFunction = require "xiaoqiang.common.XQFunction"
+    local ver = XQVersion.webVersion
+    local wifi24 = XQWifiUtil.getWifiStatus(1)
+    local wifi50 = XQWifiUtil.getWifiStatus(2)
+    local guestWifi = XQWifiUtil.getGuestWifi(1)
+    local wifi24Status = 0
+    local wifi50Status = 0
+    local wifiGuestStatus = 0
+    if wifi24 then
+        wifi24Status = tonumber(wifi24.up)
+    end
+    if wifi50 then
+        wifi50Status = tonumber(wifi50.up)
+    end
+    if guestWifi then
+        wifiGuestStatus = tonumber(guestWifi.status)
+    end
+    local remote_addr = luci.http.getenv("REMOTE_ADDR")
+    local mac = luci.sys.net.ip4mac(remote_addr)
+    local MAC = string.upper(mac)
+    local macdefault = string.upper(xqlanwanutil.getDefaultMacAddress())
+    local router_name = XQFunction.getRouterName()
+    local hardware = string.lower( XQSysUtil.getHardware() )
+    local color = XQSysUtil.getColor()
+    local _hardware = hardware
+    if hardware == "r1cl" then
+        _hardware = "r1cm"
+    end
+    local routerSrc = "router_".._hardware.."_".. color..".png"
+    local routerSrcOn = "router_".._hardware.."_".. color.."_on.png"
+    local uci = require("luci.model.uci").cursor()
+    local wifi50IsSupport = tostring(uci:get("features", "wifi", "wifi50"))
+    local lang = XQSysUtil.getLang()
+    local langfolder = string.upper(string.gsub(lang, "zh_", ""));
+%>
+<%include("web/inc/head")%>
+<title><%:小米路由器%></title>
+<meta name="viewport" content="width=1200">
+<link href="<%=resource%>/web/css/bc.css?v=<%=ver%>" rel="stylesheet">
+<link href="<%=resource%>/web/css/index.css?v=<%=ver%>" rel="stylesheet">
+</head>
+<body>
+<div id="doc">
+    <%include("web/inc/header")%>
+    <div class="mod-netmap">
+        <div class="inner clearfix">
+            <div class="devices nav-tab">
+                <div class="img"></div>
+                <p><%:终端设备%></p>
+                <div class="status status-devices" id="statusDevices"><b class="devcountonline">--</b><%:台%></div>
+            </div>
+            <div id="devline" class="line line-scaning"></div>
+            <div class="router nav-tab active">
+                <div class="img">
+                    <img class="on" src="<%=resource%>/web/img/icons/<%=routerSrcOn%>">
+                    <img class="off" src="<%=resource%>/web/img/icons/<%=routerSrc%>">
+                </div>
+                <p><%=router_name%></p>
+                <table class="status-wifi" id="statusWifi">
+                <%if wifi50IsSupport == "1" then%>
+                    <tr>
+                        <td class="l">
+                            <div class="status"><i id="ssid24status" class="ico ico-wifi-on"></i><span>2.4G: </span><b id="ssid24val">--</b></div>
+                        </td>
+                        <td class="c">|</td>
+                        <td class="r">
+                            <div class="status"><i id="ssid50status" class="ico ico-wifi-on"></i><span>5G:</span><b id="ssid50val">--</b></div>
+                        </td>
+                    </tr>
+                <%else%>
+                    <tr>
+                        <td style="border-radius:24px;" colspan="3">
+                            <div class="status"><i id="ssid24status" class="ico ico-wifi-on"></i><span>Wi-Fi:</span><b id="ssid24val">--</b></div>
+                            <div class="status" style="display:none;"><i id="ssid50status" class="ico ico-wifi-on"></i><span>5G:</span><b id="ssid50val">--</b></div>
+                        </td>
+                    </tr>
+                <%end%>
+                </table>
+            </div>
+            <div id="netline" class="line line-scaning"></div>
+            <div class="internet nav-tab active">
+                <div class="img"></div>
+                <p><%:互联网%></p>
+                <div class="status status-internet" id="statusInternet"><%:带宽%><b class="bandwidthval">--</b>M</div>
+            </div>
+        </div>
+    </div>
+    <div id="bd">
+        <div class="mod-devicestatus nav-tab-content" style="display:none;">
+            <div id="devicesTables"></div>
+        </div>
+        <div class="mod-routerstatus nav-tab-content clearfix">
+            <div class="routerinfo">
+                <div class="hd">
+                    <h3><%:路由器信息%></h3>
+                </div>
+                <div class="bd">
+                    <table>
+                        <tr>
+                            <td id="routermodel">--</td>
+                            <td id="routerversion">--</td>
+                            <td id="routermac">--</td>
+                            <td id="routersn">--</td>
+                        </tr>
+                        <tr>
+                            <th><%:路由器型号%></th>
+                            <th><%:系统ROM版本%></th>
+                            <th><%:MAC地址%></th>
+                            <th><%:SN%></th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="status-panel status-panel-first">
+                <div class="hd">
+                    <h3><%:实时网络状态%></h3>
+                    <p><%:实时下行流量%>: <b class="currentspeed">--</b> <i class="div">|</i> <%:实时上行流量%>: <b class="currentupspeed">--</b></p>
+                </div>
+                <div class="bd">
+                    <div class="canvas linechart" id="trafficChart">
+                    </div>
+                </div>
+                <div class="ft">
+                    <%:带宽%>: <span class="val"><span class="bandwidthval">--</span> M</span> <i class="div">|</i> <%:最快下载%>: <span class="val" id="maxdownloadspeed">--</span>
+                </div>
+            </div>
+            <div class="status-panel">
+                <div class="hd">
+                    <h3><%:终端流量统计%></h3>
+                    <p><%:当前终端%>: <b class="devcountonline">--</b></p>
+                </div>
+                <div class="bd">
+                    <div class="canvas">
+                        <table>
+                            <tr>
+                                <td width="200" valign="top">
+                                    <div class="chart" id="piechart" style="width:180px; height:180px;"></div>
+                                </td>
+                                <td valign="top">
+                                    <div id="piecharttable" class="charttable"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="ft">
+                    <%:总下载量%>: <span class="val" id="downloadcount">--</span> <i class="div">|</i> <%:总上传量%>: <span class="val" id="uploadcount">--</span> <i class="div">|</i> <%:累计终端%>: <span class="val" id="devcountall">--</span>
+                </div>
+            </div>
+            <div class="hr"></div>
+            <div class="status-panel status-panel-first">
+                <div class="hd">
+                    <h3><%:当前CPU状态%></h3>
+                    <p><%:当前CPU负载：%><b id="cpuused">--</b></p>
+                </div>
+                <div class="bd">
+                    <div class="canvas" id="cpuChart"></div>
+                </div>
+                <div class="ft">
+                    <%:CPU核心数%>: <span class="val" id="cpucore">--</span> <i class="div">|</i> <%:核心频率%>: <span class="val" id="cpuhz">--</span> <i class="div">|</i> <a href="###" class="gettasklist"><%:查看详情%></a>
+                </div>
+            </div>
+            <div class="status-panel">
+                <div class="hd">
+                    <h3><%:当前内存状态%></h3>
+                    <p><%:当前内存占用：%><b id="memused">--</b></p>
+                </div>
+                <div class="bd">
+                    <div class="canvas" id="memChart"></div>
+                </div>
+                <div class="ft">
+                    <%:内存容量%>: <span class="val" id="memtotal">--</span> <i class="div">|</i> <%:内存类型%>: <span class="val" id="memtype">--</span> <i class="div">|</i> <%:内存频率%>: <span class="val" id="memhz">--</span> <i class="div">|</i> <a href="###" class="gettasklist"><%:查看详情%></a>
+                </div>
+            </div>
+        </div>
+        <div class="mod-internetstatus nav-tab-content" style="display:none;">
+            <div class="internet-panel first">
+                <div class="hd">
+                    <h3><%:外网状态%></h3>
+                </div>
+                <div class="bd">
+                    <table id="wanStatusContent"></table>
+                </div>
+            </div>
+
+            <div class="internet-panel">
+                <div class="hd">
+                    <h3><%:外网带宽%></h3>
+                </div>
+                <div class="bd">
+                    <table>
+                        <tr class="first">
+                            <td>
+                                <dl>
+                                    <dt><%:下载带宽%></dt>
+                                    <dd><span id="banddownload">--</span>Mbps</dd>
+                                </dl>
+                            </td>
+                            <td>
+                                <dl>
+                                    <dt><%:上传带宽%></dt>
+                                    <dd><span id="bandupload">--</span>Mbps</dd>
+                                </dl>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <a id="btnSpeedTest" href="#" class="btn btn-primary btn-m"><span><%:重新测速%></span></a>
+                                <a id="btnBandset" href="#" class="btn btn-dft btn-m"><span><%:手工修改%></span></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="hr"></div>
+        </div>
+    </div>
+    <%include("web/inc/footer")%>
+    <div id="newguide" class="newguide" style="display:none;">
+        <div class="mask"></div>
+        <img src="<%=resource%>/web/img/<%=langfolder%>/newguide.png" />
+    </div>
+</div>
+<script type="text/tmpl" id="tmpldeviceswrap">
+<table class="mod-table-devices">
+    <thead>
+        <tr>
+            <th class="s0">{$devtype}</th>
+        {if($devlen > 0 )}
+            <th class="s1"><%:访问外网%></th>
+            {if($hasDisk)}
+            <th class="s2"><%:全盘访问%></th>
+            {/if}
+        {/if}
+        </tr>
+    </thead>
+    <tbody>
+    {$deviceslist}
+    </tbody>
+</table>
+</script>
+<script type="text/tmpl" id="tmpldevicesitem">
+<tr class="device-item">
+    <td>
+        <img class="dev-icon" width="60" src="{$devices_icon}" onerror="this.src='/img/device_list_err.png'">
+        <div class="dev-info">
+            <div class="name">{$name} &nbsp;&nbsp;{if($isself)}<span class="muted">|&nbsp;<%:本机%></span>{/if}</div>
+            <ul class="devnetinfo clearfix">
+                <li><span class="k"><%:已连接%>:</span> <span class="v">{$online}</span></li>
+                <li>
+                    {for(var i=0, len=$ip.length; i<len; i++)}
+                    <p><span class="k"><%:IP地址%>:</span> <span class="v">{$ip[i]}</span></p>
+                    {/for}
+                </li>
+                <li><span class="k"><%:MAC地址%>:</span> <span class="v">{$mac}</span></li>
+            </ul>
+        </div>
+    </td>
+    <td class="option">
+        {$option}
+    </td>
+    {if($hasDisk)}
+    <td class="option">
+        {$option2}
+    </td>
+    {/if}
+</tr>
+</script>
+<script type="text/tmpl" id="tmplWaninfo">
+<tr class="first">
+    <td>
+        <dl>
+            <dt><%:连接类型%></dt>
+            <dd>{$wantype}</dd>
+        </dl>
+    </td>
+    <td>
+        <dl>
+            <dt><%:IP地址%></dt>
+            <dd>{$ip}</dd>
+        </dl>
+    </td>
+</tr>
+<tr>
+    <td>
+        <dl>
+            <dt><%:DNS%></dt>
+            <dd>{$dns}</dd>
+        </dl>
+    </td>
+    <td>
+        <dl>
+            <dt><%:网关地址%></dt>
+            <dd>{$gateway}</dd>
+        </dl>
+    </td>
+</tr>
+</script>
+<script type="text/tmpl" id="tmpldevicesempty">
+<tr class="empty">
+    <td colspan="3"><%:暂无设备接入%></td>
+</tr>
+</script>
+<script type="text/tmpl" id="tmpldevices5gempty">
+<tr class="empty">
+    <td colspan="3">
+        <div class="devices5gempty">
+            <i class="ico-wifi-5g"></i>
+            <h4><%:当前未有5G连网设备%></h4>
+            <p><%:5G Wi-Fi是运行在5GHz以上的高频段的独立Wi-Fi比较2.4G Wi-Fi速度更快更稳定，适合电视、盒子包括距离路由器较近的设备%></p>
+            <%if lang ~= "en" then%>
+                <a href="http://www.mi.com" class="btn btn-dft btn-l" target="_blank"><span><%:去小米网购买5G智能设备%></span></a>
+            <%end%>
+        </div>
+    </td>
+</tr>
+</script>
+<script type="text/tmpl" id="tmpldevicesguestempty">
+<tr class="empty">
+    <td colspan="3">
+        <%if (wifiGuestStatus == 0) then%>
+        <div class="devicesguestempty">
+            <i class="ico-wifi-guest"></i>
+            <h4><%:当前未开启访客模式%></h4>
+            <p><%:开启后会自动生成一个独立的WiFi，这样在亲朋到好友到来时，独立的WiFi账号和家庭网络彼此隔离，也不用担心家庭网络中的任何隐私会泄露出去%></p>
+            <a href="<%=luci.dispatcher.build_url('web','setting','wifi')%>" class="btn btn-dft btn-l"><span><%:开启访客Wi-Fi%></span></a>
+        </div>
+        <%else%>
+        <div class="devicesguestempty">
+            <i class="ico-wifi-guest"></i>
+            <h4><%:当前没有访客设备连入%></h4>
+        </div>
+        <%end%>
+    </td>
+</tr>
+</script>
+<script type="text/tmpl" id="tmpl-task">
+<div class="task-list">
+    {if($appInfos.length > 0)}
+    <table class="table">
+        <tr class="{$order}">
+            <th><%:任务名称%></th>
+            <th><span class="orderbycpu">CPU</span></th>
+            <th><span class="orderbymem"><%:内存%></span></th>
+            <th width="80"><%:操作%></th>
+        </tr>
+        {for (var i = 0; i < $appInfos.length; i++)}
+        <tr>
+            <td>{$appInfos[i].name}</td>
+            <td>{$appInfos[i].cpu}%</td>
+            <td>{$appInfos[i].mem}%</td>
+            <td><a href="###" class="btn btn-dft btn-s killtask" data-status="{$appInfos[i].status}" data-id="{$appInfos[i].id}" data-pname="{$appInfos[i].name}"><span>
+            {if($appInfos[i].status == 5)}<%:结束%>{/if}
+            {if($appInfos[i].status == 7 || $appInfos[i].status == 6)}<%:开启%>{/if}
+            </span></a></td>
+        </tr>
+        {/for}
+    </table>
+    {else}
+    <p><%:没有运行中的任务%></p>
+    {/if}
+</div>
+</script>
+<script type="text/tmpl" id="tmplVasInfo">
+<div class="dialog-mod-vas">
+    <p class="tit font18"><%:路由器配置完成，我们为你准备%></p>
+    <div class="hr"></div>
+    <div class="vas-list">
+        <ul class="clearfix" id="vasListUL">
+        </ul>
+    </div>
+    <p class="vas-tip"><%:提示：以上设置可以随时在手机APP中调整%></p>
+    <div class="form-contral">
+        <a href="###" class="btn btn-primary btn-block" id="updateVasBtn"><span><%:配置%></span></a>
+    </div>
+</div>
+</script>
+<script type="text/html" id="tmplVaslist">
+<li>
+    <p class="p1">{$title}</p>
+    <p class="p2" title="{$desc}">{$desc}</p>
+    <img src="/vas/{$icon}">
+    <input type="checkbox" name="vaskey" data-key="{$postkey}" checked="checked" />
+</li>
+</script>
+<%include("web/inc/g.js")%>
+<%include("web/inc/speedtest.js")%>
+<script src="<%=resource%>/web/js/class.linechart.js"></script>
+<script src="<%=resource%>/web/js/class.pie.js"></script>
+<script>
+// net diagnisis
+$.sub('netdiagnosis', function(){
+    var apiNettb = '<%=luci.dispatcher.build_url("api", "xqnetdetect", "nettb")%>';
+    var devline = document.getElementById('devline');
+    var netline = document.getElementById('netline');
+    $.getJSON(apiNettb, function( rsp ){
+        if ( rsp.code == 0 ) {
+            if ( rsp.error == 0 ) {
+                devline.className = 'line line-ok';
+                netline.className = 'line line-ok';
+            } else {
+                devline.className = 'line line-ok';
+                netline.className = 'line line-err';
+                $(netline)
+                .attr('title', '<%:点击进行网络检测%>')
+                .click(function(){
+                    window.location.href = 'http://miwifi.com/cgi-bin/luci/diagnosis';
+                });
+            }
+        }
+    });
+});
+
+// get devices
+$.sub( 'devices:getlist', function( evt, data ){
+    var hardware ='<%=hardware%>';
+    var apiDevicesGet = '<%=luci.dispatcher.build_url("api", "misystem","devicelist")%>',
+        apiDevicesGetData = {},
+        macLocal,
+        tplItem = $( '#tmpldevicesitem' ).html(),
+        tplWaper = $('#tmpldeviceswrap').html(),
+        wraper = $('#devicesTables'),
+        devices,
+        deviceslistHtml = [],
+        listHtml = {
+            '0': [],
+            '1': [],
+            '2': [],
+            '3': []
+        },
+        hasDisk = G_FEATURES['hardware']['disk'] === '1',
+        isWifi5G = G_FEATURES['wifi']['wifi50'] === '1';
+
+    $.getJSON( apiDevicesGet, apiDevicesGetData, function( rsp ){
+        if ( rsp.code === 0 ) {
+            devices = rsp.list;
+            macLocal = rsp.mac.toUpperCase();
+            if ( devices.length > 0 ) {
+                for ( var i = 0 ; i < devices.length ; i++ ) {
+                    var d_mac, d_self, d_ip, d_type, d_option, d_signal_level, d_action, d_action2, d_online, d_download, d_dld_speed, d_wan, d_lan, type_html, type_detail, d_html, d_activets,
+                        d_devices_icon = '/img/device_list_unknow.png',
+                        // 0/1/2/3  有线 / 2.4G wifi / 5G wifi / guest wifi
+                        d_type_id,
+                        d_name,
+                        d_origin_name;
+
+                    d_mac = devices[i].mac.toUpperCase();
+
+                    if( $.isArray(devices[i].ip) ){
+                        d_ip = $(devices[i].ip).map(function(){
+                            console.log(this);
+                            return this.ip;
+                        }).get();
+                    } else {
+                        d_ip = [];
+                    }
+
+                    d_type_id = devices[i].type;
+                    d_name = devices[i].name;
+                    d_origin_name = devices[i].oname;
+
+                    d_wan = devices[i].authority.wan;
+                    d_lan = devices[i].authority.lan;
+
+                    if ( devices[i].statistics ) {
+                        d_online = devices[i].statistics.online;
+                        d_download = devices[i].statistics.download;
+                        d_dld_speed = devices[i].statistics.downspeed;
+                    }
+                    if ( devices[i].icon && devices[i].icon !== "") {
+                        d_devices_icon = '/cn/' + devices[i].icon;
+                    }
+
+                    if ( macLocal == d_mac ) {
+                        d_self = true;
+                    } else {
+                        d_self = false;
+                    }
+                    //终端操作
+                    var tplDevAction = '<a data-self="{$d_self}" data-mac="{$d_mac}" data-type="{$d_type}" href="#" class="btn-switch btn-switch-{$status} {$cls}"></a>';
+                    if ( d_wan == 0 ) {
+                        d_action = tplDevAction.tmpl({
+                            'd_self': d_self ? '1':'0',
+                            'd_mac': d_mac,
+                            'd_type': 'wan',
+                            'cls': 'act-add-back',
+                            'status': 'off'
+                        });
+                    } else {
+                        d_action = tplDevAction.tmpl({
+                            'd_self': d_self ? '1':'0',
+                            'd_mac': d_mac,
+                            'd_type': 'wan',
+                            'cls': 'act-kick-out',
+                            'status': 'on'
+                        });
+                    }
+                    if ( d_lan == 0 ) {
+                         d_action2 = tplDevAction.tmpl({
+                            'd_self': d_self ? '1':'0',
+                            'd_mac': d_mac,
+                            'd_type': 'lan',
+                            'cls': 'act-add-back',
+                            'status': 'off'
+                        });
+                    } else {
+                        d_action2 = tplDevAction.tmpl({
+                            'd_self': d_self ? '1':'0',
+                            'd_mac': d_mac,
+                            'd_type': 'lan',
+                            'cls': 'act-kick-out',
+                            'status': 'on'
+                        });
+                    }
+                    if ( d_type_id == 3 ) {
+                        d_action2 = '';
+                    }
+                    d_html = tplItem.tmpl( {
+                        'name' : StringH.encode4HtmlValue(d_name),
+                        'origin_name' : d_origin_name,
+                        'mac' : d_mac,
+                        'devices_icon' : d_devices_icon,
+                        'download' : byteFormat(d_download, 100),
+                        'speed' : byteFormat(d_dld_speed, 100),
+                        'online' : $.secondToDate(d_online),
+                        'option' : d_action,
+                        'option2' : d_action2,
+                        'ip': d_ip,
+                        'isself': d_self,
+                        'hasDisk': hasDisk
+                    } );
+
+                    listHtml[d_type_id].push( d_html );
+                }
+
+                var containerList = [],
+                    containerTitle = ['<%:网线连网设备%>','<%:2.4G连网设备%>','<%:5G连网设备%>','<%:访客连网设备%>'];
+                if (!isWifi5G) {
+                    containerTitle = ['<%:网线连网设备%>','<%:Wi-Fi连网设备%>','<%:5G连网设备%>','<%:访客连网设备%>'];
+                }
+                for (var key in listHtml) {
+                    var devlen = listHtml[key].length,
+                        devtype = containerTitle[key];
+                    if ( devlen > 0 ) {
+                        containerList.push(
+                            tplWaper.tmpl({
+                                devlen: devlen,
+                                devtype: devtype,
+                                deviceslist: listHtml[key].join(''),
+                                hasDisk: hasDisk
+                            })
+                        );
+                    } else {
+                        if ( key == 2 && isWifi5G) {
+                            containerList.push(
+                                tplWaper.tmpl({
+                                    devlen: devlen,
+                                    devtype: devtype,
+                                    deviceslist: $('#tmpldevices5gempty').html(),
+                                    hasDisk: hasDisk
+                                })
+                            );
+                        }
+                    }
+                }
+                wraper.html( containerList.join('') );
+            }
+        }
+    } );
+} );
+
+//禁止上网
+$.sub( 'devices:kick_out', function( evt, data ){
+    var requestData = {};
+    requestData['mac'] = data.mac;
+    requestData[data.type] = 0;
+    $.pub( 'loading:start' );
+    $.getJSON( '<%=luci.dispatcher.build_url("api", "xqsystem", "set_mac_filter")%>',requestData, function( rsp ){
+        $.pub( 'loading:stop' );
+        if( rsp.code === 0 ){
+            $.pub( 'devices:getlist'  );
+        } else {
+            $.alert( rsp.msg );
+        }
+    } );
+} );
+
+//允许上网
+$.sub( 'devices:add_back', function( evt, data ){
+    var requestData = {};
+    requestData['mac'] = data.mac;
+    requestData[data.type] = 1;
+    $.pub( 'loading:start' );
+    $.getJSON( '<%=luci.dispatcher.build_url("api", "xqsystem","set_mac_filter")%>',requestData, function( rsp ){
+        $.pub( 'loading:stop' );
+        if( rsp.code === 0 ){
+            $.pub( 'devices:getlist'  );
+        } else {
+            $.alert( rsp.msg );
+        }
+    } );
+});
+// devices event
+$.sub('devices:addevent', function(){
+    //禁止
+    var actKickOut = $.debounce(function( e ){
+        e.preventDefault();
+        var mac = $(this).attr('data-mac');
+        var type = $(this).attr('data-type');
+        var self = $(this).attr('data-self') === '1';
+        if ( self ) {
+            var cfm = window.confirm('<%:你确认要关闭自己？%>');
+            if ( cfm ) {
+                $.pub( 'devices:kick_out', {'mac' : mac, 'type': type} );
+            }
+        } else {
+            $.pub( 'devices:kick_out', {'mac' : mac, 'type': type} );
+        }
+    } , 300, true );
+    $( 'body' ).delegate( '.act-kick-out', 'click', actKickOut);
+
+    //允许
+    var actKickBack = $.debounce(function( e ){
+        e.preventDefault();
+        var mac = $(this).attr('data-mac');
+        var type = $(this).attr('data-type');
+        $.pub( 'devices:add_back', {'mac' : mac, 'type': type} );
+    } , 300, true );
+    $( 'body' ).delegate( '.act-add-back', 'click', actKickBack);
+});
+
+$.sub( 'wifi:get', function( evt, data ){
+    var apiGetWiFi = '<%=luci.dispatcher.build_url("api","xqnetwork","wifi_detail_all")%>',
+        apiGetWiFiData = {};
+    $.getJSON( apiGetWiFi, apiGetWiFiData, function( rsp ){
+        if ( rsp.code === 0 ) {
+            wifiInfo = rsp.info;
+            var wifi24status = wifiInfo[0].status;
+            var wifi50status = wifiInfo[1] && wifiInfo[1].status;
+            var wifi24ssid = wifiInfo[0].ssid;
+            var wifi50ssid = wifiInfo[1] && wifiInfo[1].ssid;
+            $('#ssid24status')[0].className = wifi24status == 0 ? 'ico ico-wifi-off' : 'ico ico-wifi-on';
+            $('#ssid50status')[0].className = wifi50status == 0 ? 'ico ico-wifi-off' : 'ico ico-wifi-on';
+            $('#ssid24val').text(wifi24ssid);
+            $('#ssid50val').text(wifi50ssid);
+        }
+    });
+} );
+
+$.sub('status:get', function(){
+    var apiSysstatus = '<%=luci.dispatcher.build_url("api","misystem","status")%>',
+        apiSysstatusData = {};
+
+    function getCpu( data ){
+        $('#cpuused').text( (data.load * 100).toFixed(2) + '%' );
+        $('#cpucore').text( data.core );
+        $('#cpuhz').text( data.hz );
+    }
+    function getMem( data ){
+        $('#memused').text( (data.usage * 100).toFixed(2) + '%' );
+        $('#memtotal').text( data.total );
+        $('#memhz').text( data.hz );
+        $('#memtype').text( data.type );
+    }
+    function getDev(data){
+
+        $('#devcountall').text(data.devcountall);
+        $('.devcountonline').text(data.devcountonline);
+    }
+    function getWan(data){
+        $('.currentspeed').text( byteFormat( data.downspeed, 100) + '/S');
+        $('.currentupspeed').text( byteFormat( data.upspeed, 100) + '/S')
+        $('#maxdownloadspeed').text( byteFormat( data.maxdownloadspeed , 100) + '/S' );
+        $('#downloadcount').text( byteFormat( data.download, 100 ) );
+        $('#uploadcount').text( byteFormat( data.upload, 100 ) );
+    }
+    function getHardware(data){
+        var mapChannel, mapModel;
+        mapChannel = {
+            'current': '<%:内测版%>',
+            'release': '<%:稳定版%>',
+            'stable': '<%:开发版%>'
+        },
+        mapModel = {
+            'R1D': '<%:小米路由器%>',
+            'R2D': '<%:小米路由器2%>',
+            'R1CM': '<%:小米路由器MINI%>',
+            'R1CL': '<%:小米路由器青春版%>'
+        };
+
+        $('#routermodel').text(mapModel[data.platform] + '('+ data.platform +')');
+        $('#routerversion').text('MiWiFi ' + mapChannel[data.channel] + ' ' + data.version);
+        $('#routermac').text(data.mac);
+        $('#routersn').text(data.sn);
+    }
+    $.getJSON(apiSysstatus, apiSysstatusData, function(rsp){
+        if ( rsp.code == 0 ) {
+            getCpu(rsp.cpu);
+            getMem(rsp.mem);
+            getDev({
+                devcountall: rsp.count.all,
+                devcountonline: rsp.count.online
+            });
+            getWan(rsp.wan);
+            getHardware(rsp.hardware)
+            $.pub('chart:pie_update', {devStatistics: rsp.dev});
+            $.pub('chart:speedUpdate', rsp.wan);
+            $.pub('chart:cpuUpdate', rsp.cpu);
+            $.pub('chart:memUpdate', rsp.mem);
+        }
+    });
+});
+
+$.sub('chart:pie_init', function(evt, data){
+    var pieConfig = {
+        id : 'piechart',
+        wt : 90 * 2,
+        ht : 90 * 2,
+        r : 90,
+        stroke : '#fff',
+        datas: [{value : 1, label : 't1'}],
+        count : {value : 0,label : 'KB'}
+    };
+    $.pieChart = new PieChart(pieConfig);
+});
+//更新流量分布图
+$.sub('chart:pie_update', function(evt, data){
+    var colorMap = ['#33cc33','#2673bf','#ffaa00','#ff6600','#d96cb5','#00baff','#ff4060','#00d990','#d96cca', '#ff4400'];
+    var datas = data.devStatistics;
+    if (datas.length == 0) {
+        return;
+    }
+    var icon_map = [];
+    var conf_datas = [];
+    var count = {};
+    count.value = 0;
+    count.label = 'MB';
+    for (var i = 0; i < datas.length; i++) {
+        var value = parseInt(datas[i].download, 10);
+        var value2 = parseInt(datas[i].downspeed, 10);
+        var item = {
+            value : value,
+            value2 : value2,
+            label : datas[i].devname,
+            color : colorMap[i]
+        };
+        if(value != 0){
+            conf_datas.push(item);
+        }
+        count.value += item.value;
+    };
+
+    var totalCount = (function(val){
+        var ret = byteFormat(val, 10, true);
+        return {
+            value : ret[0],
+            label : ret[1]
+        }
+    })(count.value);
+    $.pieChart.update(conf_datas, totalCount);
+});
+
+$.sub('chart:lineInit',function(evt, data){
+    $.chartLineSpeedDB = [
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0]
+    ];
+    $.chartLineSpeed = new Linechart({
+        container: document.getElementById('trafficChart'),
+        width: 489,
+        height: 200,
+        maxYval: 250,
+        maxYnum: 5,
+        labelUnit: 'KB/s',
+        lineColor: ["#33cc33","#2673BF"],
+        dotColor: ["#33cc33","#2673BF"],
+        areaColor: ["rgba(53,204,53,0.4)","rgba(38,115,191,0.4)"]
+    });
+
+    $.chartLineCpuDB = [0,0,0,0,0,0,0,0,0,0];
+    $.chartLineCpu = new Linechart({
+        container: document.getElementById('cpuChart'),
+        width: 489,
+        height: 200,
+        maxYval: 100,
+        maxYnum: 5,
+        labelUnit: '%'
+    });
+
+    $.chartLineMemDB = [0,0,0,0,0,0,0,0,0,0];
+    $.chartLineMem = new Linechart({
+        container: document.getElementById('memChart'),
+        width: 489,
+        height: 200,
+        maxYval: 100,
+        maxYnum: 5,
+        labelUnit: '%'
+    });
+});
+$.sub('chart:speedUpdate',function(evt, data){
+    var speed = data.downspeed || 0,
+        speed = parseFloat(speed),
+        upspeed = data.upspeed || 0,
+        upspeed = parseFloat(upspeed);
+        // history = data.history.split(',');
+    $.chartLineSpeedDB[0].push(speed);
+    $.chartLineSpeedDB[1].push(upspeed);
+    var len = $.chartLineSpeedDB[0].length;
+    var _linedata = $.chartLineSpeedDB[0].slice(-10);
+    var _linedata2 = $.chartLineSpeedDB[1].slice(-10);
+    $.chartLineSpeed.updateTraffic(_linedata, _linedata2);
+
+    // var clone = _linedata.slice();
+    // (function(arr){
+    //     var sum = 0,
+    //         len = arr.length,
+    //         avg;
+    //     for (var i = 0; i < len; i++) {
+    //         sum += arr[i];
+    //     }
+    //     avg = sum / len * 1024 * 1024;
+    //     $('#avgspeed').text( byteFormat(avg) + '/S' );
+    // })(clone);
+});
+$.sub('chart:cpuUpdate',function(evt, data){
+    var cpu = parseFloat(data.load) * 100;
+    $.chartLineCpuDB.push(cpu);
+    var _linedata = $.chartLineCpuDB.slice(-10);
+    $.chartLineCpu.update( _linedata );
+});
+$.sub('chart:memUpdate',function(evt, data){
+    var mem = parseFloat(data.usage) * 100;
+    $.chartLineMemDB.push(mem);
+    var _linedata = $.chartLineMemDB.slice(-10);
+    $.chartLineMem.update( _linedata );
+});
+
+//PPPoE checkstatus
+$.sub('pppoeStatus', function(evt, data){
+    time = data ? data.time : 0;
+    timer = null;
+    clearTimeout(timer);
+    function ask(){
+        $.ajax({
+            url: '<%=luci.dispatcher.build_url("api","xqnetwork","pppoe_status")%>',
+            type: "GET",
+            dataType: "json",
+            success : function(rsp){
+                var msg,
+                    ip = '-.-.-.-',
+                    mask =  '-.-.-.-',
+                    gateway =  '-.-.-.-',
+                    dns = [],
+                    action = '';
+
+                if(rsp.proto == 'pppoe'){
+                    switch(rsp.status){
+                        case 1 :
+                            msg = '<%:正在拨号...%>';
+                            timer = setTimeout(ask, 2000);
+                            break;
+                        case 2 :
+                            msg = '拨号成功';
+                            ip = rsp.ip['address'];
+                            mask = rsp.ip['mask'];
+                            gateway = rsp.gw;
+                            dns = rsp.dns;
+                            action = '<a id="pppoeStop" href="#">断开</a>';
+                            break;
+                        case 3 :
+                            msg = rsp.msg || '<%:拨号失败%>';
+                            msg = msg + '<%:，正在尝试特殊拨号模式...%>';
+                            timer = setTimeout(ask, 2000);
+                            break;
+                        case 4 :
+                            msg = '<%:已断开%>';
+                            action = '<a id="pppoeStart" href="#"><%:立即连接%></a>';
+                            // 断开后重新连接查询3次，防止拿不到底层新数据
+                            if ( askcount < 4 ) {
+                                timer = setTimeout(ask, 2000);
+                            }
+                            askcount ++;
+                            break;
+                        default:
+                            break;
+                    }
+                    if ( $.isArray(dns)) {
+                        dns = dns.join('<br>');
+                    }
+                    var statusHTML = StringH.tmpl( $('#tmplWaninfo').html(), {
+                        wantype: 'PPPoE',
+                        status: msg,
+                        ip: ip,
+                        mask: mask,
+                        gateway: gateway,
+                        dns: dns,
+                        username: rsp.pppoename,
+                        action: action
+                    });
+
+                    $( '#wanStatusContent' ).html( statusHTML );
+                } else {
+                    if ( rsp.proto == 'dhcp') {
+                        ip = rsp.ip['address'];
+                        mask = rsp.ip['mask'];
+                        gateway = rsp.gw;
+                        dns = rsp.dns;
+                        if ( $.isArray(dns)) {
+                            dns = dns.join('<br>');
+                        }
+                        if ( ip == '' ) {
+                            timer = setTimeout(ask, 2000);
+                        } else {
+                            clearTimeout( timer );
+                        }
+                        var statusHTML = StringH.tmpl( $('#tmplWaninfo').html(), {
+                            wantype: 'DHCP',
+                            ip: ip,
+                            mask: mask,
+                            gateway: gateway,
+                            dns: dns
+                        });
+                        $( '#wanStatusContent' ).html( statusHTML );
+                    } else {
+                        ip = rsp.ip['address'];
+                        mask = rsp.ip['mask'];
+                        gateway = rsp.gw;
+                        dns = rsp.dns;
+                        if ( $.isArray(dns)) {
+                            dns = dns.join('<br>');
+                        }
+                        var statusHTML = StringH.tmpl( $('#tmplWaninfo').html(), {
+                            wantype: '<%:静态IP%>',
+                            ip: ip,
+                            mask: mask,
+                            gateway: gateway,
+                            dns: dns
+                        });
+                        $( '#wanStatusContent' ).html( statusHTML );
+                    }
+                }
+            }
+        });
+    }
+    setTimeout(ask, time);
+});
+
+$.sub('switchEvent', function(){
+    var timer = null;
+    var statusListener = function(){
+        timer = window.setInterval(function(){
+            $.pub('status:get');
+        }, 10000);
+    };
+    var statusStop = function(){
+        window.clearInterval(timer);
+    }
+    var switchTo = function(idx){
+        var $tab = $('.nav-tab');
+        var $content = $('.nav-tab-content');
+
+        $tab.removeClass('active');
+        $tab.eq(idx).addClass('active');
+
+        $content.hide();
+        $content.eq(idx).show();
+
+        if ( idx == 1 ) {
+            statusListener();
+            location.hash = 'router';
+        } else {
+            statusStop();
+        }
+        if ( idx == 0 ) {
+            $.pub('devices:getlist');
+            location.hash = 'devices';
+        }
+        if ( idx == 2 ) {
+            $.pub('pppoeStatus');
+            location.hash = 'internet';
+        }
+        // 更新导航tab数据
+        $.pub('status:get');
+    };
+    $('.nav-tab').click(function(){
+        var idx = $('.nav-tab').index(this);
+        if ( $(this).hasClass('active') ) {
+            return;
+        }
+        switchTo(idx);
+    });
+
+    var hash = location.hash;
+    if ( hash == '') {
+        switchTo(1);
+    }else{
+        if (/devices/.test(hash)) {
+            switchTo(0);
+        }
+        if (/router/.test(hash)) {
+            switchTo(1);
+        }
+        if (/internet/.test(hash)) {
+            switchTo(2);
+        }
+    }
+
+});
+
+$.sub('speedTestAuto', function(){
+    if ( G_FEATURES.apps.qos === '1') {
+        $.getJSON('<%=luci.dispatcher.build_url("api", "misystem", "active")%>', function( rsp ){
+            if ( rsp.code !== 0 ) {
+                alert( rsp.msg );
+            } else {
+                $.pub('speed:history');
+            }
+        });
+    }
+});
+
+$.sub('newguide', function(){
+    var needGuide = $.cookie('needguide'),
+        ht = $( document ).height();
+    if ( needGuide === '1' ) {
+        $('#newguide').css('height', ht).show();
+    }
+    $('#newguide').click(function( e ){
+        e.preventDefault();
+        $( this ).hide();
+        $.removeCookie('needguide', {
+            path: '/'
+        });
+    });
+});
+
+
+
+
+$.sub( 'taskquery', function(){
+
+    var ajaxqueen = new AjaxQueue;
+    // 开始查询系统资源使用情况
+    ajaxqueen.addToQueue(taskcollect);
+    // 获取查询系统资源使用情况的结果
+    ajaxqueen.addToQueue(taskquery);
+
+    function taskcollect(){
+        var countryCode = 'cn',
+            edata = edata || {callback: function(){}},
+            api = '<%=luci.dispatcher.build_url("api", "xqdatacenter", "request")%>',
+            data = {payload: '{"api":642,"sleeptime":2,"country":"'+ countryCode +'"}'},
+            success = function(rsp){
+                if (rsp.code === 0) {
+                    ajaxqueen.next();
+                } else {
+                    ajaxqueen.retry(3);
+                }
+            };
+        $.getJSON(api, data, success);
+    }
+
+    function taskquery(){
+        var api = '<%=luci.dispatcher.build_url("api", "xqdatacenter", "request")%>',
+            data = {payload: '{"api":643, "QueryCategory":1}'},
+            tplTask = $('#tmpl-task').html(),
+            appInfos = [],
+            success = function(rsp){
+
+                if (rsp.code === 0 && rsp.hasQueried === 1) {
+
+                    appInfos = rsp.appInfos;
+                    appInfos.sort(function(a, b){
+                        return b.cpu - a.cpu;
+                    });
+
+                    if (!$.dialogTask) {
+                        $.dialogTask = $.dialog({
+                            title: '<%:任务管理器%>',
+                            content: tplTask.tmpl({appInfos: appInfos, order: 'orderbycpu-up'}),
+                            lock: true,
+                            beforeunload: function(){
+                                console.log('$.dialogTask close');
+                                $.dialogTask = null;
+                            }
+                        });
+                    } else {
+                        $.dialogTask.content( tplTask.tmpl({appInfos: appInfos, order: 'orderbycpu-up'}) );
+                    }
+
+                    $.Cache.set('appInfos', appInfos);
+
+                    $.pub( 'loading:stop' );
+                } else {
+                    setTimeout(function(){
+                        ajaxqueen.retry(10);
+                    }, 1000);
+                }
+            };
+        $.getJSON(api, data, success);
+    }
+
+} );
+
+$.sub( 'taskinit', function(){
+
+    var tplTask = $('#tmpl-task').html();
+
+    // 激活关闭插件
+    function taskkill(appid, status){
+        var api = '<%=luci.dispatcher.build_url("api", "xqdatacenter", "request")%>',
+            data = {payload: '{"api":606,"pluginID": "'+ appid +'","status":' + status + '}'},
+            success = function(rsp){
+                if (rsp.code === 0) {
+                    $.pub('taskquery');
+                } else {
+                    alert(rsp.msg);
+                }
+            };
+        $.getJSON(api, data, success);
+        $.pub( 'loading:start' );
+    }
+
+    // add event
+    var $body = $(document.body);
+    $body.delegate('.gettasklist', 'click', function(e){
+        e.preventDefault();
+        $.pub( 'loading:start' );
+        $.pub('taskquery');
+    });
+
+    $body.delegate('.killtask', 'click', function(e){
+        e.preventDefault();
+        var self = this,
+            appid = $(self).attr('data-id'),
+            status = $(self).attr('data-status'),
+            pname = $(self).attr('data-pname');
+        if (status === '5') {
+            if (appid !== 'xunlei') {
+                $.confirm('<%:结束 {$pname} 后，相关功能将无法使用。如要再次使用，你需要在当前界面开启该任务。 你确认要结束 {$pname} 吗？%>'.tmpl({pname: pname}), function(){
+                    taskkill(appid, 7);
+                });
+            } else {
+                $.dialogTaskXunlei = $.dialog({
+                    width: 400,
+                    title: '<%:提示%>',
+                    content: '<p style="text-align:left;"><%:如果因为下载导致路由器卡慢，建议你点击 “暂停所有下载” 来解决。若使用结束任务，路由下载功能将被停用，下次使用时你需要在当前界面再次开启%></p><div style="padding:30px 0;"><button type="button" class="btn btn-dft btn-l" id="stopdowntask"><span><%:暂停所有下载%></span></button><button type="button" class="btn btn-dft btn-l" id="killxunlei" data-id="'+appid+'" style="margin-top:15px;"><span><%:结束任务%></span></button></div>'
+                });
+            }
+        }
+        if (status === '7' || status === '6') {
+            taskkill(appid, 5);
+        }
+
+    });
+
+    $body.delegate('#stopdowntask', 'click', function(e){
+        e.preventDefault();
+        var api = '<%=luci.dispatcher.build_url("api", "xqdatacenter", "request")%>',
+            data = {payload: '{"api":516}'};
+        $.getJSON(api, data, function(rsp){
+            if (rsp.code === 0) {
+                $.dialogTaskXunlei.close();
+            } else {
+                $.alert(rsp.msg);
+            }
+        });
+    });
+
+    $body.delegate('#killxunlei', 'click', function(e){
+        e.preventDefault();
+        var appid = $(this).attr('data-id');
+        $.dialogTaskXunlei.close();
+        taskkill(appid, 7);
+    });
+
+    $body.delegate('.orderbycpu', 'click', function(e){
+        e.preventDefault();
+        var sortfn ,cls , tr = this.parentNode.parentNode,
+            appInfos = $.Cache.get('appInfos');
+        if ($(tr).hasClass('orderbycpu-up')) {
+            sortfn = function(a, b){
+                return a.cpu - b.cpu;
+            };
+            cls = 'orderbycpu-down';
+        } else {
+            sortfn = function(a, b){
+                return b.cpu - a.cpu;
+            };
+            cls = 'orderbycpu-up';
+        }
+        appInfos.sort(sortfn);
+        $.dialogTask.content(tplTask.tmpl({appInfos: appInfos, order: cls}));
+    })
+    .delegate('.orderbymem', 'click', function(e){
+        e.preventDefault();
+        var sortfn ,cls, tr = this.parentNode.parentNode,
+            appInfos = $.Cache.get('appInfos');
+        if ($(tr).hasClass('orderbymem-up')) {
+            sortfn = function(a, b){
+                return a.mem - b.mem;
+            };
+            cls = 'orderbymem-down';
+        } else {
+            sortfn = function(a, b){
+                return b.mem - a.mem;
+            };
+            cls = 'orderbymem-up';
+
+        }
+        appInfos.sort(sortfn);
+        $.dialogTask.content(tplTask.tmpl({appInfos: appInfos, order: cls}));
+    });
+});
+
+$.sub( 'vasinfo:get', function( evt, data ){
+    var dialog;
+    var bindEvent = function(){
+        //vaslist click
+        $('#vasListUL').delegate('li', 'click', function(e){
+            if( !$(e.target).is('input') ){
+                if( $(this).find('input').is(':checked') ){
+                    $(this).find('input').attr('checked', false );
+                }else{
+                    $(this).find('input').attr('checked', true );
+                }
+            }
+        });
+        //post vas
+        $('#updateVasBtn').on('click', function(e){
+            e.preventDefault();
+            var inputs = $('#vasListUL input:checked');
+            var keyArr = [];
+            $('#vasListUL li').each(function(index, item){
+                var input = $(item).find('input');
+                if( input.is(':checked') ){
+                    keyArr.push( input.attr('data-key') + '=1' );
+                }else{
+                    keyArr.push( input.attr('data-key') + '=0' );
+                }
+            });
+            setVasSwitch( keyArr.join(',') );
+        });
+    };
+    var renderVasInfo = function( rsp ){
+        var container = $('#vasListUL');
+        var liArr = [];
+        var tpl = $('#tmplVaslist').html();
+        for( var key in rsp.web ){
+            if( rsp.web.hasOwnProperty(key) ){
+                var li = StringH.tmpl(tpl, {
+                    icon: rsp.web[key]['icon'],
+                    title: rsp.web[key]['title'],
+                    desc: rsp.web[key]['desc'],
+                    postkey: key
+                });
+                liArr.push( li );
+            }
+        }
+        container.html( liArr.join('') );
+        bindEvent();
+    };
+
+    var showVasInfoDialog = function( rsp ){
+        dialog = $.dialog({
+            title: '<%:推荐设置%>',
+            content: $('#tmplVasInfo').html(),
+            lock: true,
+            width: 450,
+            initialize: function(){
+                renderVasInfo( rsp );
+                $('.panel .d-bd').addClass('dialog-vas-bd');
+            }
+        });
+    };
+
+    var setVasSwitch = function( info ){
+        var requestData = {
+            info: info
+        };
+        $.ajax({
+            url: '<%=luci.dispatcher.build_url("api", "misystem","vas_switch")%>',
+            type: 'GET',
+            datatype: 'json',
+            data: requestData,
+            success: function( res ){
+                res = $.parseJSON( res );
+                if( res.code == 0 ){
+                    dialog.close();
+                }else{
+                    $.alert( res.msg );
+                }
+            }
+        });
+    };
+
+    var apiGetVasInfo = '<%=luci.dispatcher.build_url("api","misystem","vas_info")%>',
+        apiGetVasInfoData = {key: 'new', web: 1};
+
+    $.getJSON( apiGetVasInfo, apiGetVasInfoData, function( rsp ){
+        if( rsp.code == 0 ){
+            if( rsp.web && rsp.web.length !== 0 ){
+                showVasInfoDialog( rsp );
+            }
+        }
+    });
+
+} );
+
+$(function(){
+    $.pub('netdiagnosis');
+    $.pub('wifi:get');
+    $.pub('speed:history');
+    $.pub('chart:pie_init');
+    $.pub('chart:lineInit');
+    $.pub('status:get');
+    $.pub('devices:addevent');
+    $.pub('switchEvent');
+    $.pub('speedTestAuto');
+    $.pub('newguide');
+    $.pub('taskinit');
+    $.pub('vasinfo:get');
+});
+</script>
+
+</body>
+</html>

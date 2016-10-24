@@ -1,0 +1,23 @@
+package 'features'
+
+config 'features' 'system'
+    option 'shutdown' '0'
+    option 'downloadlogs' '0'
+    option 'i18n' '1'
+
+config 'features' 'wifi'
+    option 'wifi24' '1'
+    option 'wifi50' '1'
+    option 'wifiguest' '1'
+
+config 'features' 'apmode'
+    option 'wifiapmode' '1'
+    option 'lanapmode' '1'
+
+config 'features' 'apps'
+    option 'apptc' '0'
+    option 'qos' '1'
+
+config 'features' 'hardware'
+    option 'usb' '1'
+    option 'disk' '0'

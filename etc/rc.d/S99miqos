@@ -1,0 +1,214 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+
+EXTRA_COMMANDS=" on off shutdown die init_ipt qos_flag status show_limit change_band on_limit off_limit show_band set_type set_limit reset_limit apply on_guest nprio reserve show_cfg show_guest get_seq set_seq"
+EXTRA_HELP="
+            on                                              Turn on QoS service
+            off                                             Turn off QoS service
+            change_band UP_BAND DOWN_BAND                   Set total width for uplink and downlink
+            show_band                                       Print total bandwidth
+            -------------------------------------------------
+            show_limit [IP]                                 Print Bandlimit of device, IP is optional
+            on_limit min/max/all MAC MAXU MAXD MINU MINU    Turn on up and down MAX Bandlimit of device
+            set_limit min/max/all MAC MAXU MAXD MINU MINU   Only add limit for MAC without enable it soon
+            off_limit [MAC]                                 Turn off limit for all(with MAC) or device(no MAC)
+            reset_limit [MAC]                               Only del limit for MAC without enable it soon
+            set_type [auto/min/max]                         set_type to auto/min/max
+            apply [all/host]                                Refresh all/hosts rules and enable current config
+            on_guest UP_percetage DOWN_Percetage            Set guest wifi's max up/down percentage
+            show_cfg                                        Show all configuration of MACs in system
+            -------------------------------------------------"
+
+
+EXECMD="/usr/sbin/miqosd std"
+EXECMD_C="/usr/sbin/miqosc"
+export PROCLINE="/usr/bin/lua $EXECMD"
+export PROCFLAG=$PROCLINE
+
+#0,ok; non-0, Nok
+start() {
+    #check NETMODE 1stly
+    local mode
+    mode=`uci get xiaoqiang.common.NETMODE 2>/dev/null`
+    if [ "$mode" == "wifiapmode" -o "$mode" == "lanapmode" ]; then
+        echo "In AP mode, disable QoS. exit!"
+        return 0
+    fi
+    /usr/sbin/supervisord start
+
+    qos_flag
+    if [ $? -ne "0" ]; then
+            echo 'miqos is not enabled, only keep top layer1 queue.'
+            running
+            if [ $? -eq "0" ]; then
+                $EXECMD_C off
+            fi
+            return 0
+    fi
+
+    # enable QoS Service
+    $EXECMD_C on
+
+    return 0
+}
+
+stop() {
+    shutdown
+
+    sleep 2         #sleep for waiting qdisc cleaned and steady
+    return 0
+}
+
+restart(){
+    stop &>/dev/null
+    start &>/dev/null
+    return $?
+}
+
+on(){
+    uci set miqos.settings.enabled=1
+    uci commit miqos
+
+    uci set hwnat.switch.miqos=1
+    uci commit hwnat
+
+    /etc/init.d/hwnat stop &>/dev/null
+
+    start
+}
+
+off(){
+    uci set miqos.settings.enabled=0
+    uci commit miqos
+
+    uci set hwnat.switch.miqos=0
+    uci commit hwnat
+
+    running
+    if [ $? == 1 ]; then
+        start        # if not running, invoke start, and then off it
+    fi
+
+    $EXECMD_C off     #close htb rules
+
+    #try to start hwnat whatever enough memory or not
+    /etc/init.d/hwnat start &>/dev/null
+
+    return 0
+}
+
+#return: 0,enabled; 1 disabled
+qos_flag(){
+    #config_load "miqos"
+    local st
+    st=`uci get miqos.settings.enabled 2>/dev/null`
+    if [ $st -eq "0" ]; then
+            return 1
+    fi
+    return 0
+}
+
+init_ipt(){
+   /usr/sbin/miqosd_init.sh
+   return $?
+}
+
+shutdown(){
+    $EXECMD_C shutdown
+    return 0
+}
+
+die(){
+    #
+    $EXECMD_C die &
+    /usr/sbin/supervisord stop
+    return 0
+}
+
+# status: 0, actived, 1, inactived
+status(){
+    qos_flag
+    if [ $? == 1 ]; then
+        return 1
+    fi
+
+    /usr/sbin/supervisord status
+    if [ $? == 1 ]; then
+        return 1
+    fi
+    return 0
+}
+
+running(){
+    /usr/sbin/supervisord status
+    if [ $? == 1 ]; then
+        return 1
+    fi
+    return 0
+}
+
+show_limit(){
+    $EXECMD_C show_limit $@
+}
+
+on_limit(){
+    $EXECMD_C on_limit $@
+}
+
+off_limit(){
+    $EXECMD_C off_limit $@
+}
+
+change_band(){
+    $EXECMD_C change_band $@
+}
+
+show_band(){
+    $EXECMD_C show_band $@
+}
+
+set_type(){
+    $EXECMD_C set_type $@
+}
+
+set_limit(){
+    $EXECMD_C set_limit $@
+}
+
+reset_limit(){
+    $EXECMD_C reset_limit $@
+}
+
+apply(){
+    $EXECMD_C apply $@
+}
+
+
+on_guest(){
+    $EXECMD_C on_guest $@
+}
+
+nprio(){
+    $EXECMD_C nprio $@
+}
+
+reserve(){
+    $EXECMD_C reserve $@
+}
+
+show_cfg(){
+    $EXECMD_C show_cfg $@
+}
+
+show_guest(){
+    $EXECMD_C show_guest $@
+}
+
+get_seq(){
+    $EXECMD_C get_seq $@
+}
+
+set_seq(){
+    $EXECMD_C set_seq $@
+}

@@ -1,0 +1,8 @@
+config core 'common'
+    option 'category_view_ultimate' '1'
+    option 'guest_wifi' '1'
+    option 'share_folder' '1'
+    option 'barcode_plugin' '1'
+    option 'wifi_security' '1'
+    option 'file_tunnel' '1'
+    option 'open_ssid' '1'

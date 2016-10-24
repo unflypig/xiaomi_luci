@@ -1,0 +1,7 @@
+
+config settings 'services'
+	option shopping_bar '0'
+	option auto_upgrade '1'
+	option security_page '0'
+	option baidu_video_bar '0'
+

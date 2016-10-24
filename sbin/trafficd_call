@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+LOGNAME=root
+USER=root
+export PATH LOGNAME USER
+
+[ \! -z "$1" -a -d /etc/traffic.d/$1 ] && {
+	for script in $(ls /etc/traffic.d/$1/* 2>&-); do (
+		[ -f $script ] && . $script
+	); done
+}

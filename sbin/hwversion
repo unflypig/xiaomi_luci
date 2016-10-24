@@ -1,0 +1,23 @@
+#!/bin/sh
+
+gpio12=`gpio 12 | cut -b 11`
+gpio13=`gpio 13 | cut -b 11`
+gpio14=`gpio 14 | cut -b 11`
+
+if [ "$gpio14" = "1" -a "$gpio13" = "1" -a "$gpio12" = "1" ]; then
+	echo "Ver. A"
+elif [ "$gpio14" = "1" -a "$gpio13" = "1" -a "$gpio12" = "0" ]; then
+	echo "Ver. B"
+elif [ "$gpio14" = "1" -a "$gpio13" = "0" -a "$gpio12" = "1" ]; then
+	echo "Ver. C"
+elif [ "$gpio14" = "1" -a "$gpio13" = "0" -a "$gpio12" = "0" ]; then
+	echo "Ver. D"
+elif [ "$gpio14" = "0" -a "$gpio13" = "1" -a "$gpio12" = "1" ]; then
+	echo "Ver. E"
+elif [ "$gpio14" = "0" -a "$gpio13" = "1" -a "$gpio12" = "0" ]; then
+	echo "Ver. F"
+elif [ "$gpio14" = "0" -a "$gpio13" = "0" -a "$gpio12" = "1" ]; then
+	echo "Ver. G"
+else
+	echo "Ver. H"
+fi

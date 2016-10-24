@@ -1,0 +1,11 @@
+#!/bin/sh
+
+[ "$ACTION" = "ifdown" ] && [ "$INTERFACE" = "wan" ] && {
+    killall trmd 2>/dev/null
+}
+
+[ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ] && {
+    killall trmd 2>/dev/null
+    sleep 2
+    [ -f /usr/bin/trmd ] && /usr/bin/trmd -r 10
+}

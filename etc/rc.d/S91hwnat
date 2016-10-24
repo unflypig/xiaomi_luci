@@ -1,0 +1,57 @@
+#!/bin/sh /etc/rc.common
+
+START=91
+
+service_name="miqos rule_mgr wifishare"
+
+hwnat_disabled(){
+    config_load "hwnat"
+    local switch
+    for name in $service_name
+    do
+        switch=`uci get hwnat.switch.${name} -q`
+        if [ -z $switch ]; then
+            echo "hwnat: switch name:$name is not set in config."
+            continue
+        fi
+        if [ $switch -eq "1" ]; then
+            return 1
+        fi
+    done
+
+    return 0
+}
+
+start() {
+    # if force start
+    switch=`uci get hwnat.switch.force_start -q`
+    if [ -z $switch ] || [ $switch -eq "0" ]; then
+        # if some servie need disable hwnat, then don't insmod
+        hwnat_disabled
+        if [ $? -eq 1 ]; then
+            echo "hwnat: hwnat still disabled by some service!"
+            return 0
+        fi
+    fi
+    # start hwnat
+    lsmod | grep hw_nat > /dev/null && return 0
+    echo "inserting hw_nat.ko!"
+    insmod "/lib/modules/$(uname -r)/hw_nat.ko"
+    echo "create /dev/hwnat0"
+    mknod /dev/hwnat0 c 220 0
+}
+
+stop() {
+    switch=`uci get hwnat.switch.force_start -q`
+    if [ -z $switch ] || [ $switch -eq "0" ]; then
+        hwnat_disabled
+        if [ $? -eq 1 ]; then
+            echo "hwnat: removing hw_nat.ko"
+            rmmod hw_nat.ko
+        fi
+    else
+        echo "hwnat force start, can not stop!"
+    fi
+}
+
+

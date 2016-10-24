@@ -1,0 +1,9 @@
+#!/usr/bin/env lua
+
+local mifeed = require("mifeed")
+
+local input = arg[1]
+
+if input then
+    mifeed.feed(input)
+end

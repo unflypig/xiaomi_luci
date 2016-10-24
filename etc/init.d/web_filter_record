@@ -1,0 +1,43 @@
+#!/bin/sh /etc/rc.common
+
+#for test, activate later
+START=99
+
+EXTRA_COMMANDS="/usr/sbin/web_filter_record"
+EXECMD="/usr/sbin/web_filter_record"
+
+start() {
+    export PROCLINE="${EXECMD}"
+    export PROCFLAG="${EXTRA_COMMANDS}"
+    export PROCNUM='1'
+
+    /usr/bin/matool --method api_call --params /dsal/host_list > /tmp/web_config_list
+    /usr/sbin/supervisord start
+    return $?
+}
+
+stop() {
+    export PROCLINE="${EXECMD}"
+    export PROCFLAG="${EXTRA_COMMANDS}"
+    /usr/sbin/supervisord stop
+    return $?
+}
+
+#running: 0, dead, 1, alive
+is_running() {
+    status
+}
+
+#status: 0, in-actived, 1, actived
+status(){
+    export PROCLINE="${EXECMD}"
+    export PROCFLAG="${EXTRA_COMMANDS}"
+    /usr/sbin/supervisord status
+}
+
+restart(){
+    export PROCLINE="${EXECMD}"
+    export PROCFLAG="${EXTRA_COMMANDS}"
+    /usr/sbin/supervisord restart
+    return $?
+}

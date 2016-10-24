@@ -1,0 +1,478 @@
+#!/usr/bin/lua
+-- miqos 主框架
+
+local px =  require "posix"
+local uci=  require 'luci.model.uci'
+local util = require 'luci.util'
+local io=   require 'io'
+local socket= require 'socket'
+local json= require 'json'
+local ubus = require "ubus"
+
+
+
+UNIT="kbit"
+UP,DOWN='UP','DOWN'
+const_ipt_mangle = 'iptables -t mangle '
+const_ipt_clear = 'iptables -t mangle -F '
+const_ipt_delete='iptables -t mangle -X '
+const_tc_qdisc='tc qdisc'
+const_tc_class='tc class'
+const_tc_filter='tc filter'
+
+-- qdisc规则,用于保持qdisc的规则处理
+qdisc={}
+-- 配置
+cfg={
+    server={host='127.0.0.1',port='1035'},
+    idle_timeout={wire=301,wireless=10},
+    check_interval=20,  -- 20s检测一次
+    lan={ip='',mask=''},
+    DEVS={          --在对应设备上做QoS
+        UP={dev='eth0.2',id='2',},
+        DOWN={dev='ifb0',id='1',},
+    },
+    guest={changed=0,UP=0.6,DOWN=0.6,inner={UP=0.6,DOWN=0.6},default=0.6},
+    xq={changed=0,UP=0.90,DOWN=0.90,inner={UP=0.90,DOWN=0.90},default=0.9},
+    enabled={started=true,changed=false,flag=false},
+    group={changed=false,tab=g_group_def,default='00',min_default=0.5},
+    flow={changed=false,seq='',dft='game,web,video,download',inner={base=1,game=3,web=4,video=5,download=6}},
+    qdisc={old=nil,cur=nil},
+    bands={UP=0,DOWN=0,changed=true},
+    qos_type={changed=false,mode='service'},
+    quan=1600,
+    virtual_proto='ip',
+}
+
+-- 单一流的设备，比如电视/盒子，用来做设备最低带宽预留
+band_reserve_hosts={
+    changed=true,
+    ['video']={},
+    ['other']={},
+}
+
+-- 特殊设备优先级
+special_host_list={
+    host={
+    },
+    changed=false,
+}
+
+-- 全局qdisc
+old_qdisc,cur_qdisc = '',''
+
+require "miqos.common"
+require "miqos.command"
+--require "miqos.rule_by_flow"
+require "miqos.rule_by_host"
+require "miqos.rule_by_prio"
+require "miqos.rule_by_service"
+
+--logger
+px.openlog('miqos','np',LOG_USER)
+function logger(loglevel,msg)
+    -- print(msg)
+    px.syslog(loglevel,msg)
+end
+
+--read args
+QOS_VER='CTF'
+if #arg == 1 and arg[1] == 'std' then
+    -- logger(3, ' STD mode , arg: ' .. #arg)
+    QOS_VER='STD'
+else
+    -- logger(3, ' CTF mode , arg: ' .. #arg)
+    QOS_VER='CTF'
+end
+
+-----全局定义-----------------
+g_debug=false
+g_CONFIG_HZ=100  -- HZ用来计算buffer量大小
+g_htb_buffer_factor=1.8
+g_htb_buffer_data=1024/8.0/g_CONFIG_HZ*g_htb_buffer_factor
+
+g_cursor=nil
+g_limit={}
+g_group_def={}
+g_class_def={}
+
+-- TODO: 暂时关闭，需要看测试结果
+g_enable_stab=false
+
+---
+g_leaf_type='fq_codel'   --,sfq,fq_codel
+
+g_ubus = ubus.connect()
+if not g_ubus then
+    logger(3, 'failed to connect to ubusd!')
+    return false
+end
+
+-- 清除规则
+function cleanup_system()
+    if cfg.qdisc.cur and qdisc[cfg.qdisc.cur] and qdisc[cfg.qdisc.cur].clean then
+        logger(3,'======= Cleanup QoS rules for ' .. cfg.qdisc.cur)
+        qdisc[cfg.qdisc.cur].clean(cfg.DEVS)
+        cfg.qdisc.cur=nil
+        cfg.qdisc.old=nil   -- 清除当前生效的qdisc
+    else
+        -- logger(3,'clean is not exist for mode: ' .. (cfg.qdisc.cur or ''))
+        return false
+    end
+    return true
+end
+
+-- 清除规则，并退出服务
+function system_exit()
+    cleanup_system()
+    logger(3,'======== Process Exit. =====')
+    os.exit(0)
+end
+
+-- 读取Lan的ip和mask
+local function get_network(netname)
+   local ret = g_ubus:call("network.interface", "status", {interface=netname})
+   if ret and table.getn(ret['ipv4-address']) > 0 then
+       local addr = table.remove(ret['ipv4-address'])
+       return addr.address, addr.mask
+   end
+   return nil
+end
+
+-- 读取网络配置, 在QoS on/off情况下也需要调用
+function read_network_conf()
+    local tmp = get_conf_std('network','wan','proto')
+    if QOS_VER == 'STD' then
+        if tmp == 'dhcp' or tmp == 'static' then
+            cfg.DEVS.UP.dev = 'eth0.2'
+            cfg.virtual_proto='ip'
+        elseif tmp == 'pppoe' then
+            cfg.DEVS.UP.dev = 'pppoe-wan'
+            cfg.virtual_proto='pppoe'
+        else
+            logger(1, 'cannot determine wan interface! exit')
+            return false
+        end
+    else
+        -- keep default cfg for QOS-TYPE=ctf
+        if tmp == 'pppoe' then
+            cfg.DEVS.UP.dev='eth0.2'
+            cfg.virtual_proto='pppoe'
+        end
+
+    end
+
+    -- 检测设备是否已经UP,否则直接退出
+    for _,_dev in pairs(cfg.DEVS) do
+        local ret=util.exec('ip link 2>&-|grep UP|grep ' .. _dev.dev)
+        if ret == '' then
+            logger(3,'DEV '.._dev.dev .. ' is not UP. exit. ')
+            return false
+        end
+    end
+
+    -- 获取lan ip和mask
+    cfg.lan.ip,cfg.lan.mask = get_network('lan')
+
+    return true
+end
+
+-- 更新读取相关配置文件
+-- 1. 读取全局性配置
+-- 2.调用对应的模块的配置处理逻辑
+function read_qos_config()
+    -- qos处于shutdown状态
+    if not cfg.enabled.started then
+        if g_debug then logger(3, 'qos stopped, no action.') end
+        return false
+    end
+
+    local tmp_str1,tmp_str2
+    local setting_tbl = get_tbls('miqos','miqos')
+
+    --qos开关
+    tmp_str1= setting_tbl['settings']['enabled'] or '0'
+    if cfg.enabled.flag ~= tmp_str1 then
+        cfg.enabled.flag = tmp_str1
+        cfg.enabled.changed = true
+    else
+        cfg.enabled.changed=false
+    end
+
+    -- qos type 模式改变
+    tmp_str1=setting_tbl['settings']['qos_auto'] or 'auto'
+    if cfg.qos_type.mode ~= tmp_str1 then
+        cfg.qos_type.mode = tmp_str1    -- 更新qos当前的模式
+        cfg.qos_type.changed=true
+    else
+        cfg.qos_type.changed=false
+    end
+
+    -- 读取service确认服务优先级
+    local system_tbl=get_tbls('miqos','system')
+    local tmp_str1=system_tbl['param']['flow']
+    if cfg.flow.seq ~= tmp_str1 then
+        cfg.flow.seq = tmp_str1
+        if cfg.flow.seq == '' then
+            cfg.flow.seq = cfg.flow.dft
+        end
+
+        local tab=string.split(cfg.flow.seq,',')
+        -- pr(cfg.flow)
+        for _i,_v in pairs(tab) do
+            if not cfg.flow.inner[_v] then
+                logger(3,'ERROR: not supported service-name.')
+                return false
+            end
+            cfg.flow.inner[_v] = cfg.flow.inner.base + _i
+        end
+        -- pr(cfg.flow)
+        cfg.flow.changed=true
+    end
+
+    -- 确定当前的带宽
+    tmp_str1=setting_tbl['settings']['upload'] or '0'
+    tmp_str2=setting_tbl['settings']['download'] or '0'
+    if cfg.bands.UP ~= tmp_str1 or cfg.bands.DOWN ~= tmp_str2 then
+        cfg.bands.UP,cfg.bands.DOWN = tmp_str1,tmp_str2
+        cfg.bands.changed=true
+    else
+        cfg.bands.changed=false
+    end
+
+    -- 未测带宽，则清除规则，退出
+    if tonumber(cfg.bands.UP) <=0 or tonumber(cfg.bands.DOWN) <= 0 then
+        cleanup_system()
+        return false
+    end
+
+    -- 确定当前模式
+    if cfg.enabled.flag == '0' then     -- qos off
+        cfg.qdisc.cur='prio'
+    elseif cfg.qos_type.mode == 'service' then
+        cfg.qdisc.cur='service'
+    else
+        cfg.qdisc.cur='host'
+    end
+
+    -- 更新全局的qdisc
+    old_qdisc,cur_qdisc = cfg.qdisc.old,cfg.qdisc.cur
+
+    -- call对应的模式的配置读取逻辑
+    if qdisc[cur_qdisc] and qdisc[cur_qdisc].read_qos_config then
+        qdisc[cur_qdisc].read_qos_config()
+    end
+
+    return true
+end
+
+-- 系统初始化
+local function system_init()
+
+    -- 将配置文件copy到tmp内存中,并初始化cursor
+    if not cfg2tmp() then
+        return false
+    end
+
+    if not uci_init() then
+        logger(3,'set tmp config dir failed. exit.')
+    end
+
+    g_ubus = ubus.connect()
+    if not g_ubus then
+        logger(3, 'failed to connect to ubusd!')
+        return false
+    end
+
+    -- 读取网络配置
+    if not read_network_conf() then
+        logger(3, 'failed to read network config!')
+        return false
+    end
+
+    -- read_qos_config()
+
+    -- SIGTERM to clear and exit
+    px.signal(px.SIGTERM,
+        function ()
+            logger(3,'signal TERM to stop miqos.')
+            system_exit()
+        end)
+
+    px.signal(px.SIGINT,
+        function ()
+            logger(3,'signal INT to stop miqos.')
+            system_exit()
+        end)
+
+    return true
+end
+
+g_ifb_status=''
+local function check_ifb_up()
+    -- 如果ifb状态未UP,则尝试UP
+    if g_ifb_status ~= UP then
+        --check if dev ifb0 is up
+        local ifb_up = '/usr/sbin/ip link set ifb0 up '
+        local ifb_check = '/usr/sbin/ip link show ifb0 |grep "state DOWN"'
+        local ret = util.exec(ifb_up)
+        ret = util.exec(ifb_check)
+        if ret == '' then
+            g_ifb_status = UP
+        else
+            logger(3, 'ifb0 is not up, wait for next link up.')
+            return false    -- 继续下一次set link up
+        end
+    end
+    return true
+end
+
+-- 更新调用QoS
+local function update_qos_rules()
+    local ret=false
+    if not check_ifb_up() then return false end
+
+    -- 读取配置文件（TODO: 这里需要添加一个触发开关，只有通过命令行触发的配置改变才能激发重读qos config）
+    if not read_qos_config() then
+        -- logger(3,'config no changed.')
+        return false
+    end
+
+    if qdisc[cur_qdisc].changed() or old_qdisc ~= cur_qdisc then
+        ret = qdisc[cur_qdisc].apply(old_qdisc,cfg.bands,cfg.DEVS,false)
+        cfg.qdisc.old = cfg.qdisc.cur
+    end
+
+    return ret
+end
+
+
+-- 读取uptime计数
+local function get_uptime()
+    local pp=io.open('/proc/uptime')
+    local n=pp:read('*n')
+    pp:close()
+    return math.ceil(n)
+end
+
+-- 更新对应qdisc的更新counter
+-- g_limit用于命令返回的data
+local function update_counters(devs)
+    -- logger(3,'---update counters-----.')
+
+    local cur_qdisc = cfg.qdisc.cur
+    if qdisc[cur_qdisc] and qdisc[cur_qdisc].update_counters then
+        g_limit = qdisc[cur_qdisc].update_counters(devs)
+    else
+        g_limit = {}
+    end
+end
+
+-- 主循环
+local function main_loop()
+
+    local server=assert(socket.bind(cfg.server.host,cfg.server.port))
+    server:settimeout(1)
+
+    local now_time = get_uptime()
+    local next_qos_time = now_time
+    local delta
+    local gc_timer=0
+
+    -- tables for select event
+    local set=newset()
+    set:insert(server)    -- add 'server' into select events
+
+    while true do
+
+        now_time = get_uptime()       -- 读取当前的uptime ticks
+        if now_time >= next_qos_time then
+            if update_qos_rules() then
+                gc_timer = gc_timer + 1
+                if gc_timer >= 180 then
+                    gc_timer = 0
+                    local tmp_cnt = collectgarbage('count')
+
+                    logger(3,p_sysinfo())
+                end
+
+                -- 更新tc的counters,便于直接调用返回
+                update_counters(cfg.DEVS)
+            end
+
+            next_qos_time = now_time + cfg.check_interval      -- 更新下一次update QOS检测时间
+        end
+
+        delta = next_qos_time - now_time
+        if delta > cfg.check_interval then
+            logger(3, "Warning!!! plz check Update QoS delta = " .. delta .. ", it's too long!!!!")
+            delta = cfg.check_interval
+        end
+
+        local readable, _, error = socket.select(set, nil , delta)
+        for _,v in ipairs(readable) do
+
+            if v == server then
+                -- logger(3, 'new client come in ...')
+
+                local clt=v:accept()
+                if clt then
+                    clt:settimeout(1)
+                    set:insert(clt)
+                else
+                    logger(3, 'accept client error.')
+                end
+            else
+                local data,error = v:receive()
+
+                if error then
+                    v:close()
+                    -- logger(3, 'client is disconnected.')
+                    set:remove(v)
+                else
+                    local args=string.split(data,' ')
+                    local res,execflag='',''
+                    if not args[1] then
+                        res={status=3,data='cmd is NULL.'}
+                    elseif args[1] == 'die' then
+                        v:send(json.encode({status=0}) .. "\n")
+                        v:close()
+                        logger(3,"======== COMMAND `qos die` ============")
+                        system_exit()       ---===OVER NOW===---
+
+                    else
+                        -- 命令行的处理
+                        res,execflag = process_cmd(unpack(args))
+                        if execflag then    -- 触发立即执行更新qos操作
+                            next_qos_time = 0
+                        end
+                    end
+
+                    v:send(json.encode(res) .. '\n')
+                    v:close()
+                    set:remove(v)
+                end
+            end
+        end
+    end
+end
+
+
+--[[main]]-------------------
+local function main()
+
+    if system_init() then
+        local s, e = pcall(function() main_loop() end)
+        if not s
+        then
+            logger(3,e)
+            cleanup_system()
+        end
+    else
+        logger(3, 'system initial failed. exit.')
+    end
+end
+
+main()
+
+--[[main end]]-------------------

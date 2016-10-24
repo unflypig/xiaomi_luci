@@ -1,0 +1,3 @@
+needPopUserInstruction = "false";
+usbConnectKey = "usbConnectValue";
+resyncPhotoToAlbumConfig = "true";

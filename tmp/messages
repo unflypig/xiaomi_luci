@@ -1,0 +1,245 @@
+2016-03-29T21:25:22+08:00 (none) luci[12429]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/prosetting/nat"
+2016-03-29T21:25:23+08:00 (none) luci[12429]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/prosetting/nat"
+2016-03-29T21:25:23+08:00 (none) luci[12476]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:23+08:00 (none) luci[12478]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/portforward"
+2016-03-29T21:25:23+08:00 (none) luci[12479]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/dmz"
+2016-03-29T21:25:24+08:00 (none) luci[12477]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/portforward"
+2016-03-29T21:25:24+08:00 (none) luci[12476]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:24+08:00 (none) luci[12479]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/dmz"
+2016-03-29T21:25:24+08:00 (none) luci[12478]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/portforward"
+2016-03-29T21:25:24+08:00 (none) luci[12477]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/portforward"
+2016-03-29T21:25:32+08:00 (none) luci[12560]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/setting/wifi"
+2016-03-29T21:25:33+08:00 (none) luci[12560]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/setting/wifi"
+2016-03-29T21:25:33+08:00 (none) luci[12615]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/wifi_detail_all"
+2016-03-29T21:25:33+08:00 (none) luci[12617]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:33+08:00 (none) luci[12616]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqsystem/country_code"
+2016-03-29T21:25:34+08:00 (none) luci[12617]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:34+08:00 (none) luci[12616]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqsystem/country_code"
+2016-03-29T21:25:34+08:00 (none) luci[12615]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/wifi_detail_all"
+2016-03-29T21:25:44+08:00 (none) luci[12655]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/store"
+2016-03-29T21:25:44+08:00 (none) luci[12655]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/store"
+2016-03-29T21:25:45+08:00 (none) luci[12700]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:45+08:00 (none) luci[12701]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqdatacenter/request"
+2016-03-29T21:25:45+08:00 (none) luci[12700]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:46+08:00 (none) datacenter[5303]: input json is: {"api":26, "needDetail": true}
+2016-03-29T21:25:46+08:00 (none) datacenter[5303]: output is: { "code": 0, "msg": "", "capacity": "8059879424", "available": "2882117632", "free": "2882117632" }
+2016-03-29T21:25:46+08:00 (none) luci[12701]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqdatacenter/request"
+2016-03-29T21:25:54+08:00 (none) luci[12713]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/home"
+2016-03-29T21:25:55+08:00 (none) luci[12713]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/web/home"
+2016-03-29T21:25:56+08:00 (none) luci[12793]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/wifi_detail_all"
+2016-03-29T21:25:56+08:00 (none) luci[12796]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:25:56+08:00 (none) luci[12794]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetdetect/nettb"
+2016-03-29T21:25:56+08:00 (none) luci[12797]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/active"
+2016-03-29T21:25:56+08:00 (none) luci[12795]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/bandwidth_test"
+2016-03-29T21:25:56+08:00 (none) luci[12792]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:57+08:00 (none) luci[12797]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/active"
+2016-03-29T21:25:57+08:00 (none) luci[12792]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/messages"
+2016-03-29T21:25:57+08:00 (none) luci[12795]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/bandwidth_test"
+2016-03-29T21:25:58+08:00 (none) luci[12812]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/vas_info"
+2016-03-29T21:25:58+08:00 (none) luci[12816]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/bandwidth_test"
+2016-03-29T21:25:58+08:00 (none) luci[12793]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetwork/wifi_detail_all"
+2016-03-29T21:25:59+08:00 (none) luci[12816]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/bandwidth_test"
+2016-03-29T21:25:59+08:00 (none) luci[12812]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/vas_info"
+2016-03-29T21:25:59+08:00 (none) luci[12796]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:25:59+08:00 (none) luci[12897]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:01+08:00 (none) luci[12897]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:01+08:00 (none) luci[12794]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/xqnetdetect/nettb"
+2016-03-29T21:26:06+08:00 (none) luci[13015]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:07+08:00 (none) luci[13015]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:18+08:00 (none) luci[13074]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:19+08:00 (none) luci[13074]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:28+08:00 (none) luci[13133]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:29+08:00 (none) luci[13133]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:39+08:00 (none) luci[13192]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:40+08:00 (none) luci[13192]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:49+08:00 (none) luci[13256]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:26:50+08:00 (none) luci[13256]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:04+08:00 (none) luci[13341]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:05+08:00 (none) luci[13341]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:14+08:00 (none) luci[13413]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:15+08:00 (none) luci[13413]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:25+08:00 (none) luci[13479]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:26+08:00 (none) luci[13479]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:37+08:00 (none) luci[13544]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:37+08:00 (none) luci[13544]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:47+08:00 (none) luci[13610]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:48+08:00 (none) luci[13610]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:58+08:00 (none) luci[13676]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:27:59+08:00 (none) luci[13676]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:09+08:00 (none) luci[13741]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:10+08:00 (none) luci[13741]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:20+08:00 (none) luci[13805]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:21+08:00 (none) luci[13805]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:30+08:00 (none) luci[13862]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:31+08:00 (none) luci[13862]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:44+08:00 (none) luci[13935]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:45+08:00 (none) luci[13935]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:54+08:00 (none) luci[14000]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:28:55+08:00 (none) luci[14000]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:05+08:00 (none) luci[14071]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:06+08:00 (none) luci[14071]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:16+08:00 (none) luci[14129]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:17+08:00 (none) luci[14129]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:25+08:00 (none) luci[14191]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:26+08:00 (none) luci[14191]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:36+08:00 (none) luci[14252]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:37+08:00 (none) luci[14252]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:47+08:00 (none) luci[14317]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:48+08:00 (none) luci[14317]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:29:59+08:00 (none) luci[14380]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:00+08:00 (none) luci[14380]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:10+08:00 (none) luci[14458]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:10+08:00 (none) luci[14458]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:23+08:00 (none) luci[14520]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:24+08:00 (none) luci[14520]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:33+08:00 (none) luci[14577]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:34+08:00 (none) luci[14577]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:43+08:00 (none) luci[14641]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:44+08:00 (none) luci[14641]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:54+08:00 (none) luci[14706]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:30:55+08:00 (none) luci[14706]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:07+08:00 (none) luci[14789]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:08+08:00 (none) luci[14789]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:18+08:00 (none) luci[14865]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:19+08:00 (none) luci[14865]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:30+08:00 (none) luci[14933]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:30+08:00 (none) luci[14933]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:38+08:00 (none) Hotplug: 80: remove : /devices/platform/rt3xxx-ohci/usb2/2-1/2-1:1.0/host1/target1:0:0/1:0:0:0/block/sda/sda4
+2016-03-29T21:31:38+08:00 (none) datacenter[5303]: input json is: {"api": 63, "path": "/extdisks/sda4", "dev": "sda4", "status": 0}
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: extdisk cache is empty!
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: DeployManager::usbInsertStatusChanged, path : /extdisks/sda4 , dev : sda4 , isInsert : 0 , usbPath : /extdisks/sda4
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: DeployManager::usbInsertStatusChanged, usbCondition_.notify_all, path : /extdisks/sda4 , isInsert : 0
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: begin execute system command : /etc/init.d/usb_deploy_init_script.sh stop &
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: DeployManager::checkUpdate, while.
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: DeployManager::checkUpdate, getIsExistUsb wait.
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupManager::handleBackupPathChange,  usbPath : /extdisks/sda4 , isInsert : 0
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::upgradeDB,  ver : 10 , sDBVersion_ : 10
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeTable,  ver : 2 , curVersion : 2 , category : 1
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeTable,  ver : 4 , curVersion : 4 , category : 2
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeTable,  ver : 0 , curVersion : 0 , category : 3
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeTable,  ver : 0 , curVersion : 0 , category : 4
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeTable,  ver : 0 , curVersion : 0 , category : 5
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeTable,  ver : 3 , curVersion : 3 , category : 6
+2016-03-29T21:31:38+08:00 (none) indexservice[5095]: BackupDBMgr::doUpgradeDeviceTable,  ver : 1 , curVersion : 1
+2016-03-29T21:31:39+08:00 (none) shareUpdate[15064]: no primary disk info
+2016-03-29T21:31:40+08:00 (none) Hotplug: 80: remove : /devices/platform/rt3xxx-ohci/usb2/2-1/2-1:1.0/host1/target1:0:0/1:0:0:0/block/sda
+2016-03-29T21:31:40+08:00 (none) datacenter[5303]: input json is: {"api": 63, "path": "", "dev": "sda", "status": 0}
+2016-03-29T21:31:40+08:00 (none) indexservice[5095]: extdisk cache is empty!
+2016-03-29T21:31:40+08:00 (none) indexservice[5095]: DeployManager::usbInsertStatusChanged, path :  , dev : sda , isInsert : 0 , usbPath : 
+2016-03-29T21:31:40+08:00 (none) datacenter[5303]: output is: { "code": 0, "msg": "" }
+2016-03-29T21:31:40+08:00 (none) luci[15158]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:41+08:00 (none) luci[15158]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:42+08:00 (none) indexservice[5095]: begin execute system command : sync
+2016-03-29T21:31:42+08:00 (none) datacenter[5303]: output is: { "code": 0, "msg": "" }
+2016-03-29T21:31:51+08:00 (none) luci[15234]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:31:52+08:00 (none) luci[15234]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:02+08:00 (none) luci[15306]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:03+08:00 (none) luci[15306]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:13+08:00 (none) luci[15375]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:13+08:00 (none) luci[15375]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:23+08:00 (none) luci[15442]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:24+08:00 (none) luci[15442]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:36+08:00 (none) luci[15500]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:37+08:00 (none) luci[15500]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:46+08:00 (none) luci[15603]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:47+08:00 (none) luci[15603]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:57+08:00 (none) luci[15662]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:32:58+08:00 (none) luci[15662]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:08+08:00 (none) luci[15803]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:09+08:00 (none) luci[15803]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:19+08:00 (none) luci[15892]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:20+08:00 (none) luci[15892]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:29+08:00 (none) luci[15951]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:30+08:00 (none) luci[15951]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:42+08:00 (none) luci[16075]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:42+08:00 (none) luci[16075]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:56+08:00 (none) luci[16147]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:33:57+08:00 (none) luci[16147]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:06+08:00 (none) dropbear[16140]: Bad password attempt for 'root' from 192.168.31.173:51539
+2016-03-29T21:34:07+08:00 (none) luci[16220]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:08+08:00 (none) luci[16220]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:18+08:00 (none) luci[16283]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:19+08:00 (none) luci[16283]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:29+08:00 (none) luci[16350]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:30+08:00 (none) luci[16350]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:40+08:00 (none) luci[16411]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:41+08:00 (none) luci[16411]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:51+08:00 (none) luci[16481]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:34:51+08:00 (none) luci[16481]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:01+08:00 (none) luci[16544]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:02+08:00 (none) luci[16544]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:12+08:00 (none) luci[16615]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:13+08:00 (none) luci[16615]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:23+08:00 (none) luci[16675]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:23+08:00 (none) luci[16675]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:33+08:00 (none) luci[16733]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:34+08:00 (none) luci[16733]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:44+08:00 (none) luci[16800]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:45+08:00 (none) luci[16800]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:54+08:00 (none) luci[16874]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:35:55+08:00 (none) luci[16874]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:07+08:00 (none) luci[16969]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:08+08:00 (none) luci[16969]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:18+08:00 (none) luci[17036]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:18+08:00 (none) luci[17036]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:28+08:00 (none) luci[17093]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:29+08:00 (none) luci[17093]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:41+08:00 (none) luci[17154]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:42+08:00 (none) luci[17154]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:53+08:00 (none) luci[17225]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:36:53+08:00 (none) luci[17225]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:01+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:37:01 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:37:03+08:00 (none) luci[17293]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:04+08:00 (none) luci[17293]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:07+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:37:07 /RemoteConfig.cpp:63] Load remote config with proxy: 120.134.33.170:80
+2016-03-29T21:37:10+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:37:10 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP timeout, error message: Connection timed out after 3009 millisecondsHTTP Timeout: 3000s)
+2016-03-29T21:37:12+08:00 (none) dropbear[17356]: Bad password attempt for 'root' from 192.168.31.173:51574
+2016-03-29T21:37:14+08:00 (none) luci[17361]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:15+08:00 (none) luci[17361]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:25+08:00 (none) luci[17427]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:26+08:00 (none) luci[17427]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:38+08:00 (none) luci[17490]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:38+08:00 (none) luci[17490]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:47+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:37:47 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:37:48+08:00 (none) luci[17554]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:49+08:00 (none) luci[17554]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:37:50+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:37:50 /RemoteConfig.cpp:63] Load remote config with proxy: 42.62.48.82:80
+2016-03-29T21:37:53+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:37:53 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP timeout, error message: Connection timed out after 3009 millisecondsHTTP Timeout: 3000s)
+2016-03-29T21:37:59+08:00 (none) luci[17619]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:00+08:00 (none) luci[17619]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:02+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:38:02 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:38:10+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:38:10 /RemoteConfig.cpp:63] Load remote config with proxy: 120.134.33.170:80
+2016-03-29T21:38:12+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:38:12 /RemoteConfig.cpp:63] Load remote config with proxy: 42.62.48.82:80
+2016-03-29T21:38:13+08:00 (none) luci[17703]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:14+08:00 (none) luci[17703]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:15+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:38:15 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP timeout, error message: Connection timed out after 3009 millisecondsHTTP Timeout: 3000s)
+2016-03-29T21:38:25+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:38:25 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:38:25+08:00 (none) luci[17779]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:26+08:00 (none) luci[17779]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:31+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:38:31 /RemoteConfig.cpp:63] Load remote config with proxy: 120.134.33.170:80
+2016-03-29T21:38:31+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:38:31 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:38:35+08:00 (none) luci[17841]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:36+08:00 (none) luci[17841]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:46+08:00 (none) luci[17925]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:47+08:00 (none) luci[17925]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:58+08:00 (none) luci[17994]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:38:58+08:00 (none) luci[17994]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:10+08:00 (none) luci[18086]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:10+08:00 (none) luci[18086]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:11+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:39:11 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:39:17+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:39:17 /RemoteConfig.cpp:63] Load remote config with proxy: 42.62.48.82:80
+2016-03-29T21:39:20+08:00 (none) luci[18156]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:20+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:39:20 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP timeout, error message: Connection timed out after 3009 millisecondsHTTP Timeout: 3000s)
+2016-03-29T21:39:21+08:00 (none) luci[18156]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:31+08:00 (none) luci[18225]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:32+08:00 (none) luci[18225]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:43+08:00 (none) luci[18293]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:44+08:00 (none) luci[18293]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:54+08:00 (none) luci[18368]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:55+08:00 (none) luci[18368]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:39:59+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:39:59 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP error, error message: Empty reply from serverEmpty reply from server)
+2016-03-29T21:40:03+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:40:03 /RemoteConfig.cpp:63] Load remote config with proxy: 120.134.33.170:80
+2016-03-29T21:40:05+08:00 (none) PPOC/mald[491]: [MQTT INFO 2016-03-29 21:40:04 /RemoteConfig.cpp:63] Load remote config with proxy: 42.62.48.82:80
+2016-03-29T21:40:05+08:00 (none) luci[18444]: "request:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:40:06+08:00 (none) luci[18444]: "finished:/cgi-bin/luci/;stok=77e8f70e0be9d0d414890f276293de35/api/misystem/status"
+2016-03-29T21:40:08+08:00 (none) PPOC/mald[491]: [MQTT ERROR 2016-03-29 21:40:08 /RemoteConfig.cpp:83] Unable to fetch config from server (url: http://api.miwifi.com/config, error code: HTTP timeout, error message: Connection timed out after 3009 millisecondsHTTP Timeout: 3000s)

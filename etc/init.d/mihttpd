@@ -1,0 +1,73 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2009-2012 OpenWrt.org
+
+START=22
+STOP=
+
+export NGINX="/usr/sbin/sysapihttpd"
+export EXTRA_HELP="  status  Status the service"
+export EXTRA_COMMANDS="status"
+
+FCG_PROCESS_NUM="2"
+export FCGIFLAG="/usr/bin/fcgi-cgi -c 2"
+export FCGIDLINE="nice -n-5 /usr/bin/spawn-fcgi -a 0.0.0.0 -p 8960 -U nobody -C 0 -F $FCG_PROCESS_NUM -P /var/run/fcgi-cgi.pid -- /usr/bin/fcgi-cgi -c 2"
+
+export OOM_FLAG=0
+
+stop() {
+  export PROCLINE="/usr/sbin/sysapihttpd -c /etc/mihttpd/mihttpd.conf"
+  export PROCFLAG="nginx: master process /usr/sbin/sysapihttpd -c /etc/mihttpd/mihttpd.conf"
+  /usr/sbin/supervisord stop
+  sleep 1
+  export PROCLINE="${FCGIDLINE}"
+  export PROCFLAG="${FCGIFLAG}"
+  /usr/sbin/supervisord stop
+  return $?
+}
+start() {
+  mkdir -p   /tmp/mihttpd/           
+  mkdir -p   /tmp/mihttpd/body       
+  mkdir -p   /tmp/mihttpd/cache      
+  mkdir -p   /tmp/mihttpd/fastcgi    
+  mkdir -p   /tmp/mihttpd/inforoot   
+  mkdir -p   /tmp/mihttpd/lock       
+  mkdir -p   /tmp/mihttpd/log        
+  mkdir -p   /tmp/mihttpd/luaroot    
+  mkdir -p   /tmp/mihttpd/preload    
+  mkdir -p   /tmp/mihttpd/proxy      
+  mkdir -p   /tmp/mihttpd/run        
+  mkdir -p   /tmp/mihttpd/temp       
+  chmod -R 777 /tmp/mihttpd
+  #export command line for /usr/sbin/supervisord
+  export PROCLINE="${FCGIDLINE}"
+  export PROCFLAG="${FCGIFLAG}"
+  export PROCNUM="${FCG_PROCESS_NUM}"
+  /usr/sbin/supervisord start
+
+  /usr/sbin/supervisord status >/dev/null 2>&1
+
+  if [ $? -ne 0 ]
+    then
+    echo "WARNING: fcgi-cgi start failed."
+  fi
+  
+  sleep 1
+  
+  #export command line for /usr/sbin/supervisord
+  export PROCLINE="/usr/sbin/sysapihttpd -c /etc/mihttpd/mihttpd.conf"
+  export PROCFLAG="nginx: master process /usr/sbin/sysapihttpd -c /etc/mihttpd/mihttpd.conf"
+  export PROCNUM='1'
+  /usr/sbin/supervisord start
+  return $?
+}
+restart() {
+  stop
+  sleep 1
+  start
+  return $?
+}
+shutdown() {
+  stop
+  return $?
+}
+#

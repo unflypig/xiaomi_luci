@@ -1,0 +1,6 @@
+
+config cfg 'switch'
+	option rule_mgr '0'
+	option wifishare '1'
+	option miqos '1'
+

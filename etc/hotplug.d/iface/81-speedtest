@@ -1,0 +1,4 @@
+#!/bin/sh
+[ "$ACTION" == "ifup" ] && [ "$INTERFACE" == "wan" ] && {
+    /etc/init.d/auto_speedtest wan_up
+}

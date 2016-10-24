@@ -1,0 +1,33 @@
+#!/bin/sh /etc/rc.common
+
+START=78
+STOP=20
+
+export PROCLINE="/usr/sbin/indexservice"
+
+start() {
+	/usr/sbin/supervisord start
+	return $?
+}
+
+restart() {
+	stop
+	sleep 1
+	start
+	return $?
+}
+
+shutdown() {
+	stop
+	return $?
+}
+
+stop() {
+	/usr/sbin/supervisord stop
+	return $?
+}
+status() {
+	/usr/sbin/supervisord status
+	return $?
+}
+#

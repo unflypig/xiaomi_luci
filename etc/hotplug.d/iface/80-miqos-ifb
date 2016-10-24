@@ -1,0 +1,12 @@
+#!/bin/sh
+[ "$ACTION" == "ifup" ] && [ "$INTERFACE" == "ifb" ] && {
+    /usr/sbin/redir_pkt_to_ifb.sh up
+}
+
+[ "$ACTION" == "ifdown" ] && [ "$INTERFACE" == "ifb" ] && {
+    /usr/sbin/redir_pkt_to_ifb.sh down
+}
+
+[ "$ACTION" == "ifup" ] && [ "$INTERFACE" == "wan" ] && {
+    /usr/sbin/redir_pkt_to_ifb.sh refresh
+}

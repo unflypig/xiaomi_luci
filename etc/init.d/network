@@ -1,0 +1,56 @@
+#!/bin/sh /etc/rc.common
+
+START=20
+STOP=90
+
+SERVICE_DAEMONIZE=1
+SERVICE_WRITE_PID=1
+
+start() {
+	stop
+	[ -e /proc/sys/kernel/core_pattern ] && {
+		ulimit -c unlimited
+		#echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern
+	}
+	# ensure netifd alive during OOM
+	echo '-1000' > /proc/$$/oom_score_adj
+	service_start /sbin/netifd
+	# wait for netifd start up
+	ubus -t 30 wait_for network.interface
+	setup_switch() { return 0; }
+
+	include /lib/network
+
+	{
+		/sbin/wifi down >/dev/null 2>&1
+		/sbin/wifi up
+	}
+	setup_switch
+}
+
+restart() {
+	ifdown -a
+	sleep 1
+	start
+}
+
+shutdown() {
+        wifi down
+	ifdown -a
+	# sleep to let PPPoE clean up its sesssion.
+	for i in `seq 1 10`; do
+           pidof pppd >/dev/null || break
+           sleep 1
+	done
+	stop
+}
+
+stop() {
+	service_stop /sbin/netifd
+}
+
+reload() {
+	ubus call network reload
+	/sbin/wifi down
+	/sbin/wifi up
+}

@@ -1,0 +1,10 @@
+Plugin rp-pppoe.so loaded.
+RP-PPPoE plugin version 3.10p compiled against pppd 2.4.5
+Plugin specdial.so loaded.
+add hook special_dial_hook as 0
+Interface eth0.2 has MTU of 1480 -- should be at least 1500.
+This may cause serious connection problems.
+Interface eth0.2 has MTU of 1480 -- should be at least 1500.
+This may cause serious connection problems.
+Timeout waiting for PADO packets
+Unable to complete PPPoE Discovery

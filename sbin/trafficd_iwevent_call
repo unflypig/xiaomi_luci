@@ -1,0 +1,14 @@
+#!/bin/sh
+. /lib/functions.sh
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+LOGNAME=root
+USER=root
+export PATH LOGNAME USER
+
+[ -n "$ACTION" -a -d /etc/iwevent.d ] && {
+	export TIME DEVNAME STA EVENT ACTION subsys
+		for script in $(ls /etc/iwevent.d/* 2>&-); do (
+			[ -f $script ] && . $script
+		); done
+}

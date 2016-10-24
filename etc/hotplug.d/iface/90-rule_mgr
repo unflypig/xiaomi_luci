@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ "$ACTION" = "ifup" -a "$INTERFACE" = "lan" ]; then
+	/etc/init.d/rule_mgr rule_mgr_enabled
+	if [ $? -eq 1 ]; then
+		logger -t "hotplug.d" "rule_mgr refresh_lan"
+		/etc/init.d/rule_mgr refresh_lan
+	fi
+fi

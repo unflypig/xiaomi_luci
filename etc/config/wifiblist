@@ -1,0 +1,4 @@
+
+config core 'maclist'
+	list mac 'D4:6E:5C:20:D4:BD'
+

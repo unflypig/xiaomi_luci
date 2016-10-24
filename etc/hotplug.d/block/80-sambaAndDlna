@@ -1,0 +1,61 @@
+#!/bin/sh
+# Copyright (C) 2009-2010 OpenWrt.org
+# Copyright (C) 2010 Vertical Communications
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+. /lib/functions/block.sh
+
+blkdev=`dirname $DEVPATH`
+device=`basename $DEVPATH`
+
+logger -s -p 3 -t "Hotplug" "80: $ACTION : $DEVPATH"
+
+mount_flag=1
+if [ `basename $blkdev` != "block" ]; then
+	mount_flag=0
+else
+	substr=$(echo $device|cut -c-2)
+	partitions=`cat /proc/partitions | grep $device | wc -l`
+	if [ $substr = "sd" -a $partitions -le 1 ]; then
+		mount_flag=0
+	fi
+fi
+
+proc_gpt_rsvd $device
+[ "$?" = "1" ] && exit 0
+
+
+if [ $mount_flag -eq 0 ]; then
+
+	#mountpoint=`sed -ne "s|^[^ ]*/$device ||; T; s/ .*//p" /proc/self/mounts | grep -v uploadfiles`
+	mountpoint=`cat /proc/self/mounts | grep $device | awk '{print $2}' | grep -v appdata`
+
+	substr=$(echo $device|cut -c-2)
+	substr1=$(echo $device|cut -c-3)
+
+	if [ "$substr" = "sd" ]; then
+		case "$ACTION" in
+			add)
+				/usr/sbin/shareUpdate -a
+				/usr/sbin/datacenterClient -h localhost -p 9090 -i "{\"api\": 63, \"path\": \""$mountpoint"\", \"dev\": \""$device"\", \"status\": 1}"
+				;;
+			remove)
+				/usr/sbin/datacenterClient -h localhost -p 9090 -i "{\"api\": 63, \"path\": \""$mountpoint"\", \"dev\": \""$device"\", \"status\": 0}"
+				if [ "$mountpoint" != "" ]; then
+                                	devnr=$(echo $device|cut -c 4)
+                                	if [ "$devnr" = "1" ]; then
+                                		/usr/sbin/pushClient {\"type\":302} 存储设备被强行拔出 请先在小米路由文件管理页面卸载后再拔出。 1
+					fi
+					/usr/sbin/shareUpdate -r $mountpoint
+				fi
+
+				( cat /proc/mounts | grep uploadfiles | grep $device ) && umount /tmp/uploadfiles
+
+				umount -l /dev/$device                                                  
+				umount -l $mountpoint       
+				;;
+		esac	
+	fi
+fi

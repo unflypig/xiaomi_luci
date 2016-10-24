@@ -1,0 +1,39 @@
+#!/bin/sh /etc/rc.common
+
+START=97
+STOP=20
+
+#export command line for /usr/sbin/supervisord
+export PROCLINE="/usr/sbin/pluginTaskmonitor"
+#export PROC_USE_CGROUP_PATH="/dev/cgroup/mem/group1/tasks"
+
+
+
+start() {
+	/usr/sbin/supervisord start
+	return $?
+}
+
+restart() {
+	stop
+	sleep 1
+	start
+	return $?
+}
+
+shutdown() {
+	stop
+	return $?
+}
+
+stop() {
+	/usr/sbin/supervisord stop
+	return $?
+}
+status() {
+	/usr/sbin/supervisord status
+	ret=$?
+	echo $ret
+	return $ret
+}
+#

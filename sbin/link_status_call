@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+PORT_NUM=$2
+LINK_STATUS=$3
+
+export LINK_STATUS PORT_NUM
+
+[ \! -z "$1" -a -d /etc/traffic.d/$1 ] && {
+	for script in $(ls /etc/traffic.d/$1/* 2>&-); do (
+		[ -f $script ] && . $script
+	); done
+}

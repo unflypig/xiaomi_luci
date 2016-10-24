@@ -1,0 +1,64 @@
+#!/bin/sh
+
+SERVER_NAME_FILE='/tmp/state/pppoe-service-name'
+PAP_FILE='/tmp/state/pppoe-server-pap'
+
+
+usage () {
+    echo "A helper script using dummy PPPoE server to find out client's dial-up config"
+    echo "usage: $0 start <timeout>"
+    echo -e "\tReturn zero when success, non-zero mean failed."
+    echo -e "\tAuthentication info can be found in $PAP_FILE"
+    echo -e "\tService Name can be found in $SERVER_NAME_FILE"
+    exit 1
+}
+
+
+cleanup() {
+    rm -f $SERVER_NAME_FILE
+    rm -f $PAP_FILE
+    killall -9 pppoe-server &>/dev/null
+    sleep 1
+}
+
+wait_timeout() {
+    timeout="$1"
+    timeout="${timeout:-40}"
+    while [ $timeout -gt 0 ]; do
+	if [ -f $PAP_FILE ]; then
+	    break
+	else
+	    sleep 1
+	fi
+	let timeout=timeout-1
+    done
+}
+
+start_pppoe() {
+    cleanup
+    pppoe-server -I eth0.2 -I br-lan -k -S xiaomi
+    wait_timeout $1
+    killall -9 pppoe-server &> /dev/null
+    sleep 1
+    killall -9 pppoe-server &> /dev/null
+    [ -f $SERVER_NAME_FILE ] && echo "Service-Name: $(cat $SERVER_NAME_FILE)"
+    if [ -f $PAP_FILE ]; then
+        echo "PPPoE:"
+	echo "$(cat $PAP_FILE)"
+	return 0
+    else
+	echo "can't find PPPoE request, restart try again"
+	return 1
+    fi
+}
+
+case "$1" in
+    start)
+	shift
+	start_pppoe "$1"
+    ;;
+    *)
+	usage
+    ;;
+esac
+exit "$?"
